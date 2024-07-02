@@ -2,10 +2,10 @@ import React from "react";
 import Image from "next/image";
 import logo from "../utils/topbar/avatar.svg";
 
-const TopBar = () => {
+const TopBar = ({ title }) => {
   return (
-    <div className="flex justify-between items-center bg-[#5599FF] h-[80px] px-9 text-white">
-      <h1 className="text-[24px] font-extrabold">Bilim AI</h1>
+    <div className="flex justify-between items-center bg-[#5599FF] h-[80px] text-white mb-[80px]">
+      <h1 className="text-[24px] font-extrabold">{title}</h1>
       <Image src={logo} alt="My Image" width={40} />
     </div>
   );
