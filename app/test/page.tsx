@@ -22,7 +22,7 @@ interface AnsweredQuestions {
   difficulty: string | null;
 }
 
-const page: React.FC = () => {
+const Page: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -271,4 +271,4 @@ const page: React.FC = () => {
   );
 };
 
-export default page;
+export default Page;
