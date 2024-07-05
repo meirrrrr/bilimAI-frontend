@@ -1,5 +1,6 @@
 import Image from "next/image";
 import TopBar from "./components/TopBar";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -19,7 +20,9 @@ export default function Home() {
       </p>
       <div className="flex justify-center flex-col">
         <button className="bg-[#FFED65] py-2 rounded-md">
-          <span className="text-[#235391] font-semibold text-[14px]">GO</span>
+          <Link href="/about-test">
+            <span className="text-[#235391] font-semibold text-[14px]">GO</span>
+          </Link>
         </button>
       </div>
     </div>
