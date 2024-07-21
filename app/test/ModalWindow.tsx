@@ -45,7 +45,7 @@ const HintModal: React.FC<HintModalProps> = ({
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
                 >
-                  Hint
+                  Подсказка
                 </Dialog.Title>
                 <div className="mt-2">
                   {loadingHint ? (
@@ -61,7 +61,7 @@ const HintModal: React.FC<HintModalProps> = ({
                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     onClick={closeModal}
                   >
-                    Close
+                    Закрыть
                   </button>
                 </div>
               </Dialog.Panel>

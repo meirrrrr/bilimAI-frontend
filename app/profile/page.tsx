@@ -1,38 +1,56 @@
 "use client";
-import React, { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import logo from "./elprimo.jpeg";
+import Image from "next/image";
 
-const TestSelection = () => {
-  const router = useRouter();
-  const [testType, setTestType] = useState("nis");
-  const [userId, setUserId] = useState("");
+interface TestHistory {
+  testName: string;
+  score: number;
+  date: string;
+}
 
+interface User {
+  testHistory: TestHistory[];
+  _id: string;
+  email: string;
+  username: string;
+  password: string;
+  __v: number;
+}
+
+const Profile = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleTestTypeChange = (event: any) => {
-    setTestType(event.target.value);
-  };
-
-  const handleStartTest = async () => {
-    try {
-      const userId = localStorage.getItem("user");
-      const userString = userId ? JSON.parse(userId) : null;
-      console.log("Test started");
-      router.push(`/test?type=${testType}&id=${userString._id}`);
-    } catch (error) {
-      console.error("Error starting test:", error);
-    }
-  };
+  const [userData, setUserData] = useState<User | null>(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    const userString = user ? JSON.parse(user) : null;
+    const fetchUser = async () => {
+      try {
+        if (userString && userString._id) {
+          const res = await axios.get<User>(
+            `http://localhost:3003/api/v1/user/${userString._id}`
+          );
+          setUserData(res.data);
+          console.log(res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100">
-      <header className="flex items-center justify-between px-6 py-4">
+    <div className="min-h-screen bg-gray-100">
+      <header className="flex items-center justify-between px-6 py-4 bg-white shadow-md">
         <div className="flex items-center gap-2">
           <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center">
             <BotIcon className="w-5 h-5 text-primary-foreground" />
@@ -44,7 +62,11 @@ const TestSelection = () => {
             className="text-gray-500 top-4 right-4 p-2 rounded-md ml-[130px]"
             onClick={toggleMenu}
           >
-            {isMenuOpen ? <XIcon /> : <MenuIcon />}
+            {isMenuOpen ? (
+              <XIcon className="w-6 h-6" />
+            ) : (
+              <MenuIcon className="w-6 h-6" />
+            )}
           </button>
         </div>
         <div
@@ -54,9 +76,9 @@ const TestSelection = () => {
         >
           <div className="p-4">
             <button className="text-white" onClick={toggleMenu}>
-              <XIcon />
+              <XIcon className="w-6 h-6" />
             </button>
-            <Link href="/Профиль">
+            <Link href="/profile">
               <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
                 Мой профиль
               </button>
@@ -84,42 +106,47 @@ const TestSelection = () => {
           </div>
         </div>
       </header>
-      <div className="flex flex-col items-center justify-center mt-[80px] p-6">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-          <h1 className="text-2xl font-bold mb-4">Выбери тип теста</h1>
-          <p className="mb-4 text-gray-700">
-            В тесте будет 40 вопросов по математике, 20 вопросов по логике, и 20
-            вопросов на грамотность чтения.
-          </p>
-          <div className="mb-4">
-            <label className="mr-4">
-              <input
-                type="radio"
-                value="nis"
-                checked={testType === "nis"}
-                onChange={handleTestTypeChange}
-                className="mr-2"
-              />
-              НИШ
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="ktl"
-                checked={testType === "ktl"}
-                onChange={handleTestTypeChange}
-                className="mr-2"
-              />
-              КТЛ
-            </label>
+      <div className="container mx-auto p-6">
+        <h1 className="text-xl font-bold mb-6">Мой профиль</h1>
+        {userData ? (
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="flex gap-4">
+              <Avatar>
+                <Image src={logo} alt="elprimo-logo" />
+              </Avatar>
+              <h2 className="text-2xl font-semibold mb-4">
+                {userData.username}
+              </h2>
+            </div>
+            <p className="mb-4">
+              <strong>Email: </strong>
+              {userData.email}
+            </p>
+            <h3 className="text-xl font-semibold mb-2">История тестов</h3>
+            {userData.testHistory.length > 0 ? (
+              <ul className="space-y-2">
+                {userData.testHistory.map((test, index) => (
+                  <li key={index} className="border p-4 rounded-lg bg-gray-50">
+                    <p>
+                      <strong>Тест: </strong> {test.testName}
+                    </p>
+                    <p>
+                      <strong>Результат: </strong> {test.score}%
+                    </p>
+                    <p>
+                      <strong>Дата: </strong>{" "}
+                      {new Date(test.date).toLocaleDateString()}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>История тестов отсутствует.</p>
+            )}
           </div>
-          <button
-            onClick={handleStartTest}
-            className="bg-[#1CB0F6] text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-          >
-            Начни тест
-          </button>
-        </div>
+        ) : (
+          <p>Loading...</p>
+        )}
       </div>
     </div>
   );
@@ -189,4 +216,4 @@ function MenuIcon(props: any) {
   );
 }
 
-export default TestSelection;
+export default Profile;

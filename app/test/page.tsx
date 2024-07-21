@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Image from "next/image";
-import burger from "../utils/topbar/burger.svg";
-import HintModal from "./ModalWindow";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
+import HintModal from "./ModalWindow";
 
 interface Question {
   _id: string;
@@ -22,7 +23,14 @@ interface AnsweredQuestions {
   difficulty: string | null;
 }
 
-const Page: React.FC = () => {
+export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const typeOfTest = searchParams.get("type");
+  const userId = searchParams.get("id");
+
+  const [selectedOption, setSelectedOption] = useState(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -35,38 +43,47 @@ const Page: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hint, setHint] = useState("");
   const [loadingHint, setLoadingHint] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // --------------------FETCHING QUESTION FROM API----------------------------
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const storedQuestions = sessionStorage.getItem("questions");
-        if (storedQuestions) {
-          const parsedQuestions = JSON.parse(storedQuestions);
-          setQuestions(parsedQuestions);
-          setOptions(createOptions(parsedQuestions[0]));
-          setLoading(false);
-        } else {
-          const res = await axios.get<Question[]>(
-            "http://127.0.0.1:3003/api/v1/mathTest"
-          );
-          setQuestions(res.data);
-          setOptions(createOptions(res.data[0]));
-          sessionStorage.setItem("questions", JSON.stringify(res.data));
-          setLoading(false);
-        }
+        const res = await axios.post(
+          "http://127.0.0.1:3003/api/v1/start-test",
+          {
+            userId: userId,
+            type: typeOfTest,
+          }
+        );
+        console.log(typeOfTest, userId);
+        console.log(res.data.test.questions);
+        setQuestions(res.data.test.questions);
+        setOptions(createOptions(res.data.test.questions[0]));
+        sessionStorage.setItem(
+          "questions",
+          JSON.stringify(res.data.test.questions)
+        );
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching questions:", error);
         setLoading(false);
       }
     };
 
-    fetchQuestions();
+    const timeoutId = setTimeout(() => {
+      fetchQuestions();
+    }, 5000);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const createOptions = (question: Question) => {
     return [question.correct_answer, ...question.incorrect_answers];
   };
+  // ------------------------------------------------------------------
 
+  // ---------------HANDLE CLICKS--------------------------------------
   const handleAnswerClick = (answer: string) => {
     const isCorrect = answer === questions[currentQuestionIndex].correct_answer;
     setSelectedAnswer(answer);
@@ -87,13 +104,9 @@ const Page: React.FC = () => {
     setCurrentQuestionIndex(nextIndex);
     setOptions(createOptions(questions[nextIndex]));
   };
+  //----------------------------------------------------------------
 
-  const handleQuestionClick = (index: number) => {
-    setCurrentQuestionIndex(index);
-    setOptions(createOptions(questions[index]));
-    setSelectedAnswer(answeredQuestions[index]?.answer || null);
-  };
-
+  // --------------------SUBMIT-------------------------------------
   const handleSubmit = async () => {
     const finalAnswers = questions.map((question, index) => ({
       answer: answeredQuestions[index]?.answer || null,
@@ -111,39 +124,15 @@ const Page: React.FC = () => {
     console.log(feedback);
     localStorage.setItem("feedback", feedback.feedback);
     localStorage.setItem("sum", feedback.correct_answers_count);
+    router.push("/test/feedback");
   };
+  //
 
+  // --------------------LOADING CHECK FOR QUESTION---------------------
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-between h-screen py-[20px]">
-        <div className="flex items-center justify-around w-full max-w-3xl mb-[110px] px-9">
-          <Image src={burger} alt="burger icon" />
-          <div className="w-4/5 bg-[#FFED65] rounded-full h-8 overflow-hidden">
-            <div></div>
-          </div>
-        </div>
-        <div className=" flex flex-col justify-center  bg-white p-8 rounded-lg shadow-md w-4/5 max-w-lg text-center mb-[30px] h-[350px] overflow-y-auto">
-          <p className="text-xl mb-4 text-[#235391] font-bold pt-[20px]"></p>
-          <div className="space-y-2 font-medium">
-            <button
-              className={`block w-full py-2 px-4 rounded-lg focus:outline-none}`}
-            ></button>
-          </div>
-        </div>
-        <div className="flex space-x-2">
-          <button
-            onClick={handleNextClick}
-            className="border-2 text-white py-1 w-[120px] rounded-lg shadow-lg"
-          >
-            Next
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="border-2 text-white py-1 w-[120px] rounded-lg shadow-lg"
-          >
-            Submit
-          </button>
-        </div>
+      <div className="flex flex-col items-center justify-center h-screen py-20 bg-white">
+        <p>Loading...</p>
       </div>
     );
   }
@@ -155,7 +144,9 @@ const Page: React.FC = () => {
   const currentQuestion = questions[currentQuestionIndex];
   const progressPercentage =
     (Object.keys(answeredQuestions).length / questions.length) * 100;
+  ///---------------------------------------------------------------------
 
+  // --------------------------MODAL WINDOW HINTS--------------------------
   const handleGetHint = async () => {
     setLoadingHint(true);
     try {
@@ -175,100 +166,219 @@ const Page: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+  //------------------------------------------------------------------------
+
   return (
-    <div className="flex flex-col items-center justify-between h-screen bg-[#5599FF] py-[20px]">
-      <div className="flex items-center justify-around w-full max-w-3xl mb-5 px-9">
-        <Image src={burger} alt="burger icon" />
-        <div className="w-4/5 bg-[#FFED65] rounded-full h-8 overflow-hidden">
-          <div
-            className="bg-green-500 h-full rounded-full transition-all duration-500"
-            style={{ width: `${progressPercentage}%` }}
-          ></div>
+    <div className="min-h-screen bg-white p-4">
+      <header className="flex items-center justify-between py-4">
+        <div className="flex items-center gap-2">
+          <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center">
+            <BotIcon className="w-5 h-5 text-primary-foreground" />
+          </div>
+          <h2 className="text-2xl font-bold text-[#1CB0F6] w-[100px]">
+            Bilim AI
+          </h2>
+          <button
+            className="text-gray-500 top-4 right-4 p-2 rounded-md ml-[130px]"
+            onClick={toggleMenu}
+          >
+            {isMenuOpen ? <XIcon /> : <MenuIcon />}
+          </button>
+        </div>
+      </header>
+      <div
+        className={`fixed top-0 right-0 h-full w-64 bg-gray-900 text-white transform ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        } transition-transform duration-300 ease-in-out z-40`}
+      >
+        <div className="p-4">
+          <button className="text-white" onClick={toggleMenu}>
+            <XIcon />
+          </button>
+          <Link href="/profile">
+            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
+              Мой профиль
+            </button>
+          </Link>
+          <Link href="/about-test">
+            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
+              Начать тест
+            </button>
+          </Link>
+          <Link href="/lessons">
+            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
+              Уроки
+            </button>
+          </Link>
+          <Link href="/chat">
+            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
+              AI ассистент
+            </button>
+          </Link>
+          <Link href="/">
+            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
+              Выйти
+            </button>
+          </Link>
         </div>
       </div>
-      <div className="flex space-x-2 mb-[30px] w-full overflow-x-auto font-medium">
-        {questions.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handleQuestionClick(index)}
-            className={`w-8 h-8 rounded-full px-3 ${
-              index === currentQuestionIndex
-                ? "bg-[#FFED65] text-[#235391]"
-                : answeredQuestions[index]
-                ? "bg-green-500 text-white"
-                : "bg-gray-300 text-black"
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
-      {currentQuestion ? (
-        <div className=" flex flex-col justify-center  bg-white p-8 rounded-lg shadow-md w-4/5 max-w-lg text-center mb-[30px] h-[350px] overflow-y-auto">
-          <p className="text-xl mb-4 text-[#235391] font-bold pt-[20px]">
-            {currentQuestion.question}
-          </p>
-          <div className="space-y-2 font-medium">
-            {options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleAnswerClick(option)}
-                className={`block w-full py-2 px-4 rounded-lg focus:outline-none ${
-                  selectedAnswer === option
-                    ? "bg-[#235391] text-white"
-                    : "bg-[#5599FF] text-white hover:bg-blue-700"
-                }`}
-              >
-                {option}
-              </button>
-            ))}
+      <main className="max-w-xl mx-auto bg-white rounded-lg">
+        <h1 className="text-3xl font-semibold mb-4">БИЛ тест</h1>
+        <div className="relative pt-1 mb-4">
+          <div className="flex mb-2 items-center justify-between">
+            <div>
+              <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-[#1CB0F6]">
+                Progress
+              </span>
+            </div>
+            <div className="text-right">
+              <span className="text-xs font-semibold inline-block text-blue-600">
+                /10
+              </span>
+            </div>
+          </div>
+          <div className="w-8/10 bg-gray-300 rounded-full h-2 overflow-hidden ">
+            <div
+              className="bg-green-500 h-full rounded-full transition-all duration-500"
+              style={{ width: `${progressPercentage}%` }}
+            ></div>
           </div>
         </div>
-      ) : (
-        <div className="bg-white p-8 rounded-lg shadow-md w-4/5 max-w-lg text-center mb-[20px]">
-          <div className="animate-pulse flex space-x-4">
-            <div className="flex-1 space-y-4 py-1">
-              <div className="h-4 bg-gray-400 rounded w-3/4"></div>
-              <div className="space-y-2">
-                <div className="h-4 bg-gray-400 rounded"></div>
-                <div className="h-4 bg-gray-400 rounded"></div>
-                <div className="h-4 bg-gray-400 rounded"></div>
+        {currentQuestion ? (
+          <div className="mb-4">
+            <h2 className="text-sm font-medium text-gray-500 mb-2">
+              {currentQuestion.topic}
+            </h2>
+            <p className="text-sm mt-2 mb-[10px]">
+              {currentQuestionIndex + 1}. {currentQuestion.question}
+            </p>
+            <div className="mt-4">
+              {options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleAnswerClick(option)}
+                  className={`block w-full py-2 px-4 rounded-lg border mb-4 focus:outline-none text-sm ${
+                    selectedAnswer === option
+                      ? "bg-[#1CB0F6] text-white"
+                      : "bg-white border-gray-400 text-black hover:bg-blue-100"
+                  }`}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white p-8 rounded-lg shadow-md w-4/5 max-w-lg text-center mb-5">
+            <div className="animate-pulse flex space-x-4">
+              <div className="flex-1 space-y-4 py-1">
+                <div className="h-4 bg-gray-400 rounded w-3/4"></div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-400 rounded"></div>
+                  <div className="h-4 bg-gray-400 rounded"></div>
+                  <div className="h-4 bg-gray-400 rounded"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-      <div className="flex space-x-2">
-        {currentQuestionIndex < questions.length - 1 && (
+        )}
+        {currentQuestionIndex < questions.length - 1 ? (
+          <div>
+            <button
+              className="mt-4 w-full bg-gradient-to-r from-orange-400 to-pink-500 text-white py-2 px-4 rounded mb-3 text-sm"
+              onClick={handleNextClick}
+            >
+              След
+            </button>
+            <button
+              onClick={handleGetHint}
+              className="mt-2 bg-blue-500 text-white py-2 px-4 rounded w-[343px] text-sm"
+            >
+              {loadingHint ? "Грузится..." : "Подсказка"}
+            </button>
+            <HintModal
+              isOpen={isModalOpen}
+              closeModal={closeModal}
+              hint={hint}
+              loadingHint={loadingHint}
+            />
+          </div>
+        ) : (
           <button
-            onClick={handleNextClick}
-            className="border-2 text-white py-1 w-[120px] rounded-lg shadow-lg"
+            className="mt-4 w-full bg-gradient-to-r from-orange-400 to-pink-500 text-white py-2 px-4 rounded text-sm"
+            onClick={handleSubmit}
           >
-            Next
+            Закончить
           </button>
         )}
-        <button
-          onClick={handleSubmit}
-          className="border-2 text-white py-1 w-[120px] rounded-lg shadow-lg"
-        >
-          <Link href="/test/feedback">Submit</Link>
-        </button>
-      </div>
-      <button
-        onClick={handleGetHint}
-        className="mt-2 bg-blue-500 text-white p-2 rounded"
-      >
-        {loadingHint ? "Loading..." : "Get Hint"}
-      </button>
-
-      <HintModal
-        isOpen={isModalOpen}
-        closeModal={closeModal}
-        hint={hint}
-        loadingHint={loadingHint}
-      />
+      </main>
     </div>
   );
-};
+}
 
-export default Page;
+function BotIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 8V4H8" />
+      <rect width="16" height="12" x="4" y="8" rx="2" />
+      <path d="M2 14h2" />
+      <path d="M20 14h2" />
+      <path d="M15 13v2" />
+      <path d="M9 13v2" />
+    </svg>
+  );
+}
+
+function XIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
+function MenuIcon(props: any) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="4" x2="20" y1="12" y2="12" />
+      <line x1="4" x2="20" y1="6" y2="6" />
+      <line x1="4" x2="20" y1="18" y2="18" />
+    </svg>
+  );
+}
