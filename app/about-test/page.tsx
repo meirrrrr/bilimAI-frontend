@@ -56,7 +56,7 @@ const TestSelection = () => {
             <button className="text-white" onClick={toggleMenu}>
               <XIcon />
             </button>
-            <Link href="/Профиль">
+            <Link href="/profile">
               <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
                 Мой профиль
               </button>

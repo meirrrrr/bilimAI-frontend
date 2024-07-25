@@ -24,6 +24,7 @@ interface User {
 const Profile = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userData, setUserData] = useState<User | null>(null);
+  const [result, setResult] = useState("") || null;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -31,6 +32,9 @@ const Profile = () => {
 
   useEffect(() => {
     const user = localStorage.getItem("user");
+    const result = localStorage.getItem("sum");
+    setResult(result!);
+
     const userString = user ? JSON.parse(user) : null;
     const fetchUser = async () => {
       try {
@@ -128,14 +132,14 @@ const Profile = () => {
                 {userData.testHistory.map((test, index) => (
                   <li key={index} className="border p-4 rounded-lg bg-gray-50">
                     <p>
-                      <strong>Тест: </strong> {test.testName}
+                      <strong>{test.name}</strong>
                     </p>
                     <p>
-                      <strong>Результат: </strong> {test.score}%
+                      <strong>Результат: </strong>
                     </p>
                     <p>
                       <strong>Дата: </strong>{" "}
-                      {new Date(test.date).toLocaleDateString()}
+                      {new Date(test.createdAt).toLocaleDateString()}
                     </p>
                   </li>
                 ))}

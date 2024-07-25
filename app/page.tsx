@@ -1,6 +1,10 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
+import ktl from "./utils/ktl.png";
+import nis from "./utils/nis.jpg";
+import logo from "./utils/logo.svg";
 
 export default function Component() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,70 +14,169 @@ export default function Component() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100">
-      <header className="w-full bg-white shadow">
+    <div className="flex flex-col items-center min-h-screen">
+      <header className="w-full bg-gray-100 shadow px-3">
         <div className="container mx-auto flex items-center justify-between py-4 px-6">
-          <h1 className="text-2xl font-bold text-[#1CB0F6]">Bilim AI</h1>
+          <div className="flex items-center gap-[12px]">
+            <Image src={logo} alt="logo" className="w-[30px]" />
+            <h1 className="text-2xl font-bold text-[#1CB0F6]">Bilim AI</h1>
+          </div>
           <button
-            className="text-gray-500 fixed top-4 right-4 z-50 p-2 rounded-md"
+            className="text-gray-500 top-4 right-4 z-50 p-2 rounded-md"
             onClick={toggleMenu}
           >
-            {isMenuOpen ? <XIcon /> : <MenuIcon />}
+            {isMenuOpen ? "" : <MenuIcon />}
           </button>
         </div>
       </header>
 
       {/* Sliding Menu */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-gray-900 text-white transform ${
-          isMenuOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 ease-in-out z-40`}
+        className={`fixed top-0 left-0 w-full bg-gray-200 transform h-[150px] ${
+          isMenuOpen ? "translate-y-0" : "-translate-y-full"
+        } transition-transform duration-700 ease-in-out z-40`}
       >
         <div className="p-4">
-          <button className="text-white" onClick={toggleMenu}>
+          <button className="text-black" onClick={toggleMenu}>
             <XIcon />
           </button>
           <Link href="/login">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
+            <button className="mt-4 w-full bg-[#58CC02] text-white py-2 px-4 rounded-lg">
               Login
             </button>
           </Link>
         </div>
       </div>
-
-      <main className="container mx-auto flex flex-col items-center py-8 px-6">
-        <section className="bg-white rounded-lg shadow-md p-6 mb-6 w-full max-w-lg">
+      <main
+        className={`container mx-auto flex flex-col items-center py-8 px-4 bg-white ${
+          isMenuOpen
+            ? "opacity-40 pointer-events-none"
+            : "opacity-100 backdrop-blur-sm"
+        }`}
+      >
+        <section className="py-3 mb-6 w-full max-w-lg text-center mt-[20px]">
           <h2 className="text-3xl font-bold mb-4">
             Поступи в школы мечты{" "}
-            <span className="text-[#1CB0F6]">BIL NIS</span> с нашим{" "}
-            <span className="text-[#1CB0F6]">AI учителем</span>, твой
-            персональный компаньон.
+            <span className="text-[#1CB0F6]">БИЛ НИШ</span> с нашим{" "}
+            <span className="text-[#1CB0F6]">AI учителем</span>
           </h2>
-          <p className="text-[#4B5563] mb-6 font-medium">
-            AI Tutor – это инструмент обучения, который обеспечивает
-            индивидуальную поддержку в зависимости от предмета и уровня
-            образования, в котором вам нужна помощь. Благодаря мгновенному
-            общению, практическим тестам, планам уроков и материалам для чтения.
+          <p className="text-[#4B5563] mb-[40px] font-medium">
+            AI Tutor – обучающий инструмент, предоставляющий персонализированную
+            поддержку по предметам и уровням образования.
           </p>
-          <button className="bg-[#58CC02] text-white py-2 px-4 rounded-lg flex items-center">
-            <Link href="/registration">Попробовать бесплатно</Link>
-            <ArrowRightIcon />
-          </button>
+          <div className="flex justify-center">
+            <button className="bg-[#58CC02] text-white py-3 px-4 rounded-2xl flex mb-[50px]">
+              <Link href="/registration">Попробовать бесплатно</Link>
+              <ArrowRightIcon />
+            </button>
+          </div>
+          <div className="flex gap-[10px] items-center">
+            <Image
+              src={ktl}
+              alt="ktl-logo"
+              width={110}
+              className="relative top-[10px]"
+            />
+            <Image src={nis} alt="nis-logo" width={200} />
+          </div>
         </section>
-        <section className="bg-white rounded-lg shadow-md p-6 w-full max-w-lg">
-          <h3 className="text-[#1CB0F6] mb-2">
+        <section className={`bg-white rounded-lg p-6 w-full max-w-lg`}>
+          <h3 className="text-[#1CB0F6] mb-2 text-sm">
             Обучение на основе искусственного интеллекта
           </h3>
-          <h4 className="text-2xl font-bold mb-4">
+          <h4 className="text-3xl font-ligth mb-[40px]">
             Откройте для себя преимущества AI учителя
           </h4>
-          <p className="text-gray-700">
-            Улучшите свой опыт обучения с помощью AI Tutor и получайте помощь в
-            выполнении домашних заданий в режиме 24/7, подготовку к тестированию
-            и многое другое.
-          </p>
+          <div className="flex flex-col gap-[30px] mb-[50px]">
+            <div className="bg-[#58CC02] py-[40px] px-6 rounded-xl text-white">
+              <h1 className="font-medium text-lg mb-5">АДАПТИВНЫЕ ТЕСТЫ</h1>
+              <p className="text-sm font-thin text-white">
+                Подготовьтесь к тесту в КТЛ НИШ с помощью нашего полнометражного
+                адаптивного теста и посмотрите прогнозируемый результат.
+              </p>
+            </div>
+            <div className="bg-[#58CC02] py-[40px] px-6 rounded-xl text-white">
+              <h1 className="font-medium text-lg mb-5 ">
+                ДАННЫЕ ОБ УСПЕВАЕМОСТИ
+              </h1>
+              <p className="text-sm font-thin  text-white">
+                Посмотрите, в каких областях вы сильны, а в каких - слабы, чтобы
+                определить, насколько хорошо вы учитесь.
+              </p>
+            </div>
+            <div className="bg-[#58CC02] py-[40px] px-6 rounded-xl">
+              <h1 className="font-medium text-lg mb-5  text-white">
+                ТЫСЯЧИ ВОПРОСОВ
+              </h1>
+              <p className="text-sm font-thin text-white">
+                Ежедневно задавайте столько вопросов, сколько захотите, не
+                беспокоясь о том, что они закончатся.
+              </p>
+            </div>
+          </div>
+          <div className="px-3">
+            <h1 className="text-3xl mb-3 text-[#1CB0F6] font-semibold">
+              Study Smarter, Not Harder
+            </h1>
+            <p className="text-md">
+              Испытайте себя в реальной экзаменационной обстановке с помощью
+              полноформатных адаптивных тестов Bilim AI. Bilim AI выявит ваши
+              сильные и слабые стороны на основе теста, что позволит вам
+              эффективно усовершенствовать стратегию обучения. Легко
+              просматривайте пропущенные вопросы и отслеживайте свой прогресс с
+              течением времени.
+            </p>
+          </div>
         </section>
       </main>
+      <footer className=" text-black py-6 mt-8 px-4">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap justify-between items-center">
+            <div className="w-full sm:w-auto mb-4 sm:mb-0">
+              <h2 className="text-xl font-bold text-[#1CB0F6]">Bilim AI</h2>
+              <p className="text-[14px]">
+                Обучающий инструмент, предоставляющий персонализированную
+                поддержку по предметам и уровням образования.
+              </p>
+            </div>
+            <div className="w-full sm:w-auto mb-4 sm:mb-0">
+              <h3 className="text-lg font-semibold text-[#1CB0F6]">Контакты</h3>
+              <ul className="text-[14px]">
+                <li>Email: meiirzhan04@gmail.com</li>
+                <li>Телефон: +7 (707) 714-6923</li>
+              </ul>
+            </div>
+            <div className="w-full sm:w-auto">
+              <h3 className="text-lg font-semibold text-[#1CB0F6]">
+                Социальные сети
+              </h3>
+              <div className="flex space-x-4 cursor-pointer">
+                <a
+                  href="https://facebook.com/bilimai"
+                  className="hover:text-gray-400"
+                >
+                  Facebook
+                </a>
+                <a
+                  href="https://twitter.com/bilimai"
+                  className="hover:text-gray-400"
+                >
+                  Twitter
+                </a>
+                <a
+                  href="https://instagram.com/bilimai"
+                  className="hover:text-gray-400"
+                >
+                  Instagram
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="mt-6 border-t border-gray-700 pt-4 text-center">
+            <p className="text-[16px]">© 2024 Bilim AI. Все права защищены.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

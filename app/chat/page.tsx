@@ -4,6 +4,10 @@ import axios from "axios";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import logo from "../utils/logo.svg";
+import Image from "next/image";
+
+const apikey = process.env.OPENAI_API_KEY;
 
 export default function Component() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,8 +62,7 @@ export default function Component() {
       await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
-          Authorization:
-            "Bearer sk-proj-P2HlUslEPN8oUPcr2aEaT3BlbkFJjEoS91gp87LF7CrdYo04",
+          Authorization: `Bearer sk-proj-3XxSelBSVzwY6QpGNMabT3BlbkFJ8tcsPsoyMPz6ziIthyBW`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(apiRequestBody),
@@ -86,22 +89,21 @@ export default function Component() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
+  {
+  }
   return (
     <div className="flex flex-col h-[100vh] max-w-2xl mx-auto bg-background rounded-lg shadow-lg w-full">
-      <header className="flex items-center justify-between px-6 py-4">
-        <div className="flex items-center gap-2">
-          <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center">
-            <BotIcon className="w-5 h-5 text-primary-foreground" />
+      <header className="w-full bg-gray-200 shadow px-3">
+        <div className="container mx-auto flex items-center justify-between py-4 px-6">
+          <div className="flex items-center gap-[12px]">
+            <Image src={logo} alt="logo" className="w-[30px]" />
+            <h1 className="text-2xl font-bold text-[#1CB0F6]">Bilim AI</h1>
           </div>
-          <h2 className="text-2xl font-bold text-[#1CB0F6] w-[100px]">
-            Bilim AI
-          </h2>
           <button
-            className="text-gray-500 top-4 right-4 p-2 rounded-md ml-[130px]"
+            className="text-gray-500 top-4 right-4 z-50 p-2 rounded-md"
             onClick={toggleMenu}
           >
-            {isMenuOpen ? <XIcon /> : <MenuIcon />}
+            {isMenuOpen ? "" : <MenuIcon />}
           </button>
         </div>
       </header>
@@ -172,7 +174,7 @@ export default function Component() {
             </div>
           ))}
         </div>
-        <div className="border-t px-6 py-4 bg-white">
+        <div className="border-t px-6 py-4 bg-gray-200">
           <div className="relative">
             <Textarea
               placeholder="Напиши свое сообщение..."
@@ -186,10 +188,10 @@ export default function Component() {
             <Button
               type="button"
               size="icon"
-              className="absolute w-8 h-8 top-3 right-3"
+              className="absolute w-8 h-8 top-3 right-3 bg-[#1CB0F6]"
               onClick={handleSend}
             >
-              <SendIcon className="w-4 h-4" />
+              <SendIcon className="w-4 h-4 text-white" />
               <span className="sr-only">Send</span>
             </Button>
           </div>
@@ -235,6 +237,7 @@ function MenuIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      color="#1CB0F6"
     >
       <line x1="4" x2="20" y1="12" y2="12" />
       <line x1="4" x2="20" y1="6" y2="6" />

@@ -236,7 +236,7 @@ export default function Home() {
             </div>
             <div className="text-right">
               <span className="text-xs font-semibold inline-block text-blue-600">
-                /10
+                {currentQuestionIndex}/10
               </span>
             </div>
           </div>
