@@ -16,7 +16,7 @@ export default function Component() {
   const handleRegistration = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3003/api/v1/register",
+        "https://bilimai-backend-production.up.railway.app/api/v1/register",
         {
           email,
           username,

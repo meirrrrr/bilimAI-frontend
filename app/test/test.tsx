@@ -50,7 +50,7 @@ export default function Home() {
     const fetchQuestions = async () => {
       try {
         const res = await axios.post(
-          "http://127.0.0.1:3003/api/v1/start-test",
+          "https://bilimai-backend-production.up.railway.app/api/v1/start-test",
           {
             userId: userId,
             type: typeOfTest,

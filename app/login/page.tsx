@@ -17,10 +17,13 @@ export default function Component() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:3003/api/v1/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://bilimai-backend-production.up.railway.app/api/v1/login",
+        {
+          email,
+          password,
+        }
+      );
       const { accessToken, refreshToken, user } = response.data;
 
       localStorage.setItem("accessToken", accessToken);
