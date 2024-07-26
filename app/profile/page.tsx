@@ -7,9 +7,11 @@ import logo from "./elprimo.jpeg";
 import Image from "next/image";
 
 interface TestHistory {
+  name: string;
   testName: string;
   score: number;
   date: string;
+  createdAt?: string;
 }
 
 interface User {
@@ -139,7 +141,7 @@ const Profile = () => {
                     </p>
                     <p>
                       <strong>Дата: </strong>{" "}
-                      {new Date(test.createdAt).toLocaleDateString()}
+                      {new Date(test.createdAt!).toLocaleDateString()}
                     </p>
                   </li>
                 ))}
