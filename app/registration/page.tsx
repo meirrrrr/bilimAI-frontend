@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+
+  const router = useRouter();
 
   const handleRegistration = async () => {
     try {
@@ -24,7 +26,7 @@ export default function Component() {
         }
       );
       console.log("User successfully created", response.data);
-      redirect("/login");
+      router.push("/login");
     } catch (error: any) {
       console.error("Login failed:", error.response?.data || error.message);
     }
