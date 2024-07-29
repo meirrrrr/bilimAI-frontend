@@ -26,7 +26,7 @@ export default function Component() {
         }
       );
       console.log("User successfully created", response.data);
-      router.push("/login");
+      router.push("/test");
     } catch (error: any) {
       console.error("Login failed:", error.response?.data || error.message);
     }

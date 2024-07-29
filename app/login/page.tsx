@@ -25,7 +25,6 @@ export default function Component() {
         }
       );
       const { accessToken, refreshToken, user } = response.data;
-
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("user", JSON.stringify(user));

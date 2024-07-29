@@ -62,7 +62,7 @@ export default function Component() {
       await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
-          Authorization: `Bearer sk-proj-3XxSelBSVzwY6QpGNMabT3BlbkFJ8tcsPsoyMPz6ziIthyBW`,
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(apiRequestBody),
