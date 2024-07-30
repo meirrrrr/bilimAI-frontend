@@ -36,7 +36,7 @@ export default function Component() {
     <div className="flex min-h-[100dvh] flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-md space-y-6">
         <div className="flex flex-col justify-center items-center">
-          <h1 className="font-bold text-3xl mb-4">Bilim AI</h1>
+          <h1 className="font-bold text-3xl mb-4 text-[#1CB0F6]">Bilim AI</h1>
           <p className="font-semibold text-lg">Зарегистрироваться как ученик</p>
           <p className="text-[14px]">
             Уже есть аккаунт?{" "}
@@ -81,7 +81,7 @@ export default function Component() {
           <CardFooter>
             <Button
               type="submit"
-              className="w-full bg-[#1CB0F6]"
+              className="w-full bg-[#58CC02]"
               onClick={handleRegistration}
             >
               <Link href="/login">Зарегистрироваться</Link>

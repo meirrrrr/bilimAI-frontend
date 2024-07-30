@@ -117,7 +117,7 @@ export default function Home() {
     console.log("Final Answers:", finalAnswers);
 
     const response_feedback = await axios.post(
-      "http://127.0.0.1:8000/generate_feedback/",
+      "bilimai-py-production.up.railway.app/generate_feedback/",
       finalAnswers
     );
     const feedback = response_feedback.data;
@@ -150,9 +150,12 @@ export default function Home() {
   const handleGetHint = async () => {
     setLoadingHint(true);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/get_hint/", {
-        question: questions[currentQuestionIndex].question,
-      });
+      const response = await axios.post(
+        "bilimai-py-production.up.railway.app/get_hint/",
+        {
+          question: questions[currentQuestionIndex].question,
+        }
+      );
       setHint(response.data.hint);
       setIsModalOpen(true);
     } catch (error) {
