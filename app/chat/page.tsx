@@ -1,11 +1,7 @@
 "use client";
 import { useState } from "react";
-import axios from "axios";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import logo from "../utils/logo.svg";
-import Image from "next/image";
 import TopBar from "../../components/TopBar";
 
 const apikey = process.env.OPENAI_API_KEY;

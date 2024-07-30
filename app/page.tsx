@@ -4,8 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import ktl from "./utils/ktl.png";
 import nis from "./utils/nis.jpg";
-import logo from "./utils/logo.svg";
-import TopBar from "@/components/TopBar";
 
 export default function Component() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,8 +14,8 @@ export default function Component() {
 
   return (
     <div className="flex flex-col items-center min-h-screen">
-      <header className="w-full shadow px-3">
-        <div className="container mx-auto flex items-center justify-between py-5 md:px-[102px] lg:px-[200px]">
+      <header className="w-full shadow px-3 bg-gray-100 mb-[80px]">
+        <div className="container mx-auto flex items-center justify-between py-5">
           <div className="flex items-center gap-3">
             <BotIcon />
             <h1 className="text-2xl font-bold text-[#1CB0F6]">Bilim AI</h1>
@@ -30,7 +28,6 @@ export default function Component() {
           </button>
         </div>
       </header>
-
       {/* Sliding Menu */}
       <div
         className={`fixed top-0 left-0 w-full bg-gray-200 transform h-[150px] ${
