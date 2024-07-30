@@ -1,15 +1,17 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import TopBar from "../../components/TopBar";
+import Sidebar from "@/components/Sidebar";
+import { UserIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const apikey = process.env.OPENAI_API_KEY;
 
-export default function Component() {
+const ChatComponent = () => {
   const [messages, setMessages] = useState([
     {
       message:
@@ -19,6 +21,7 @@ export default function Component() {
   ]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSend = async () => {
     const newMessage = {
@@ -35,10 +38,14 @@ export default function Component() {
     await processMessageToChatGpt(newMessages);
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   async function processMessageToChatGpt(chatMessages: any) {
     let apiMessages = chatMessages.map((message: any) => {
       let role = "";
-      if (message.sender == "ChatGpt") {
+      if (message.sender === "ChatGPT") {
         role = "assistant";
       } else {
         role = "user";
@@ -54,7 +61,7 @@ export default function Component() {
       };
 
       const apiRequestBody = {
-        model: "gpt-4o",
+        model: "gpt-4",
         messages: [systemMessage, ...apiMessages],
       };
 
@@ -66,9 +73,7 @@ export default function Component() {
         },
         body: JSON.stringify(apiRequestBody),
       })
-        .then((data) => {
-          return data.json();
-        })
+        .then((data) => data.json())
         .then((data) => {
           console.log(data);
           setMessages([
@@ -84,66 +89,94 @@ export default function Component() {
       console.error("Error sending message:", error);
     }
   }
+
   return (
-    <div className="flex flex-col h-screen w-full mx-auto bg-white rounded-lg shadow-lg">
-      <TopBar />
-      <div className="flex flex-col flex-grow">
-        <div className="overflow-y-scroll p-6 space-y-4 flex-grow bg-gray-200 rounded-lg pt-[70px] lg:px-[230px] md:px-[120px]">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex items-center gap-4 ${
-                message.sender === "user" ? "justify-end" : ""
-              }`}
-            >
-              {message.sender === "ChatGPT" && (
-                <div className="bg-green-200 rounded-full w-8 h-8 flex items-center justify-center">
-                  <BotIcon className="w-5 h-5 text-muted-foreground" />
-                </div>
-              )}
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+
+      {/* Main Content */}
+      <div className="flex flex-col flex-grow lg:ml-64">
+        {/* Header */}
+        <header className="flex items-center justify-between p-4 bg-white shadow-md lg:hidden">
+          <button
+            onClick={toggleMenu}
+            className="p-2 text-gray-600 hover:text-gray-900"
+          >
+            {isMenuOpen ? (
+              <XMarkIcon className="w-6 h-6" />
+            ) : (
+              <Bars3Icon className="w-6 h-6" />
+            )}
+          </button>
+          <h1 className="text-xl font-bold">Чат</h1>
+          <div className="flex items-center">
+            <Link href="/profile">
+              <button className="p-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+                <UserIcon className="w-6 h-6" />
+              </button>
+            </Link>
+          </div>
+        </header>
+
+        {/* Chat Content */}
+        <div className="flex flex-col flex-grow bg-gray-200 rounded-lg">
+          <div className="overflow-y-scroll p-6 space-y-4 flex-grow bg-gray-200 rounded-lg lg:px-[200px]">
+            {messages.map((message, index) => (
               <div
-                className={`rounded-lg p-4 max-w-[70%] ${
-                  message.sender === "ChatGPT"
-                    ? "bg-green-200 text-green-800"
-                    : "bg-blue-200 text-blue-800"
+                key={index}
+                className={`flex items-center gap-4 ${
+                  message.sender === "user" ? "justify-end" : ""
                 }`}
               >
-                <p className="text-sm">{message.message}</p>
-              </div>
-              {message.sender === "user" && (
-                <div className="bg-blue-200 rounded-full w-8 h-8 flex items-center justify-center">
-                  <UserIcon className="w-5 h-5 text-primary-foreground" />
+                {message.sender === "ChatGPT" && (
+                  <div className="bg-green-200 rounded-full w-8 h-8 flex items-center justify-center">
+                    <BotIcon className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                )}
+                <div
+                  className={`rounded-lg p-4 max-w-[70%] ${
+                    message.sender === "ChatGPT"
+                      ? "bg-green-200 text-green-800"
+                      : "bg-blue-200 text-blue-800"
+                  }`}
+                >
+                  <p className="text-sm">{message.message}</p>
                 </div>
-              )}
+                {message.sender === "user" && (
+                  <div className="bg-blue-200 rounded-full w-8 h-8 flex items-center justify-center">
+                    <UserIcon className="w-5 h-5 text-primary-foreground" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="px-6 py-[20px] bg-white">
+            <div className="flex justify-center items-center relative w-full md:w-3/4 lg:w-2/3 mx-auto">
+              <Textarea
+                placeholder="Напиши свое сообщение..."
+                name="message"
+                id="message"
+                rows={1}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                className="min-h-[48px] rounded-2xl resize-none p-4 border border-neutral-400 shadow-sm pr-16 w-full"
+              />
+              <Button
+                type="button"
+                size="icon"
+                className="absolute w-8 h-8 top-3 right-3 bg-[#1CB0F6] hover:bg-[#1390c4] transition-colors"
+                onClick={handleSend}
+              >
+                <SendIcon className="w-4 h-4 text-white" />
+                <span className="sr-only">Send</span>
+              </Button>
             </div>
-          ))}
-        </div>
-        <div className="px-6 py-[20px] bg-white">
-          <div className="flex justify-center items-center relative w-full md:w-3/4 lg:w-2/3 mx-auto">
-            <Textarea
-              placeholder="Напиши свое сообщение..."
-              name="message"
-              id="message"
-              rows={1}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="min-h-[48px] rounded-2xl resize-none p-4 border border-neutral-400 shadow-sm pr-16 w-full"
-            />
-            <Button
-              type="button"
-              size="icon"
-              className="absolute w-8 h-8 top-3 right-3 bg-[#1CB0F6] hover:bg-[#1390c4] transition-colors"
-              onClick={handleSend}
-            >
-              <SendIcon className="w-4 h-4 text-white" />
-              <span className="sr-only">Send</span>
-            </Button>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 function BotIcon(props: any) {
   return (
@@ -189,22 +222,4 @@ function SendIcon(props: any) {
   );
 }
 
-function UserIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-  );
-}
+export default ChatComponent;

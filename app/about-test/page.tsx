@@ -1,14 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Sidebar from "@/components/Sidebar";
+import { UserIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 const TestSelection = () => {
   const router = useRouter();
   const [testType, setTestType] = useState("nis");
-  const [userId, setUserId] = useState("");
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleTestTypeChange = (event: any) => {
@@ -31,162 +30,122 @@ const TestSelection = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100">
-      <header className="flex items-center justify-between px-6 py-4">
-        <div className="flex items-center gap-2">
-          <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center">
-            <BotIcon className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <h2 className="text-2xl font-bold text-[#1CB0F6] w-[100px]">
-            Bilim AI
-          </h2>
+    <div className="flex h-screen">
+      <Sidebar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+
+      <div className="flex flex-col flex-grow lg:ml-64">
+        <header className="flex items-center justify-between p-4 bg-white shadow-md lg:hidden">
           <button
-            className="text-gray-500 top-4 right-4 p-2 rounded-md ml-[130px]"
             onClick={toggleMenu}
+            className="p-2 text-gray-600 hover:text-gray-900"
           >
-            {isMenuOpen ? <XIcon /> : <MenuIcon />}
+            {isMenuOpen ? (
+              <XMarkIcon className="w-6 h-6" />
+            ) : (
+              <Bars3Icon className="w-6 h-6" />
+            )}
           </button>
-        </div>
-        <div
-          className={`fixed top-0 right-0 h-full w-64 bg-gray-900 text-white transform ${
-            isMenuOpen ? "translate-x-0" : "translate-x-full"
-          } transition-transform duration-300 ease-in-out z-40`}
-        >
-          <div className="p-4">
-            <button className="text-white" onClick={toggleMenu}>
-              <XIcon />
-            </button>
+          <h1 className="text-xl font-bold">Добро пожаловать, [User Name]</h1>
+          <div className="flex items-center">
             <Link href="/profile">
-              <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-                Мой профиль
-              </button>
-            </Link>
-            <Link href="/about-test">
-              <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-                Начать тест
-              </button>
-            </Link>
-            <Link href="/lessons">
-              <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-                Уроки
-              </button>
-            </Link>
-            <Link href="/chat">
-              <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-                AI ассистент
-              </button>
-            </Link>
-            <Link href="/">
-              <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-                Выйти
+              <button className="p-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+                <UserIcon className="w-6 h-6" />
               </button>
             </Link>
           </div>
-        </div>
-      </header>
-      <div className="flex flex-col items-center justify-center mt-[80px] p-6">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-          <h1 className="text-2xl font-bold mb-4">Выбери тип теста</h1>
-          <p className="mb-4 text-gray-700">
-            В тесте будет 40 вопросов по математике, 20 вопросов по логике, и 20
-            вопросов на грамотность чтения.
-          </p>
-          <div className="mb-4">
-            <label className="mr-4">
-              <input
-                type="radio"
-                value="nis"
-                checked={testType === "nis"}
-                onChange={handleTestTypeChange}
-                className="mr-2"
-              />
-              НИШ
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="ktl"
-                checked={testType === "ktl"}
-                onChange={handleTestTypeChange}
-                className="mr-2"
-              />
-              КТЛ
-            </label>
+        </header>
+        <div className="flex flex-col items-center justify-center mt-[20px] p-6 w-full max-w-5xl lg:ml-[100px]">
+          <div className="bg-gray-100 p-8 rounded-lg shadow-lg w-full max-w-md text-center mb-[50px]">
+            <h1 className="text-3xl font-bold mb-6 text-[#1CB0F6]">
+              Выберите тип теста
+            </h1>
+            <p className="mb-6 text-gray-700">
+              В тесте будет 40 вопросов по математике, 20 вопросов по логике, и
+              20 вопросов на грамотность чтения.
+            </p>
+            <div className="mb-6 flex justify-center">
+              <label className="mr-6 flex items-center">
+                <input
+                  type="radio"
+                  value="nis"
+                  checked={testType === "nis"}
+                  onChange={handleTestTypeChange}
+                  className="mr-2"
+                />
+                НИШ
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  value="ktl"
+                  checked={testType === "ktl"}
+                  onChange={handleTestTypeChange}
+                  className="mr-2"
+                />
+                КТЛ
+              </label>
+            </div>
+            <button
+              onClick={handleStartTest}
+              className="bg-[#1CB0F6] text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 w-full"
+            >
+              Начать тест
+            </button>
           </div>
-          <button
-            onClick={handleStartTest}
-            className="bg-[#1CB0F6] text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-          >
-            Начни тест
-          </button>
+          <div className="w-full bg-gray-100 p-8 rounded-lg shadow-lg text-center mb-[50px]">
+            <h2 className="text-2xl font-bold mb-4 text-[#1CB0F6]">
+              Инструкции и Руководства
+            </h2>
+            <p className="mb-4 text-gray-700">
+              Перед началом теста, пожалуйста, ознакомьтесь с инструкциями.
+              Убедитесь, что у вас есть все необходимые материалы и вы в
+              комфортной обстановке для прохождения теста.
+            </p>
+            <h2 className="text-2xl font-bold mb-4 text-[#1CB0F6]">
+              Преимущества Теста
+            </h2>
+            <p className="mb-4 text-gray-700">
+              Этот тест поможет вам оценить свои знания и подготовиться к
+              будущим экзаменам. Он покрывает важные области, такие как
+              математика, логика и грамотность.
+            </p>
+            <h2 className="text-2xl font-bold mb-4 text-[#1CB0F6]">
+              Пример Вопросов
+            </h2>
+            <p className="mb-4 text-gray-700">
+              Вот несколько примеров вопросов, которые вы можете встретить:
+            </p>
+            <ul className="list-disc list-inside mb-4 text-gray-700">
+              <li>Математика: Решите уравнение 2x + 3 = 7.</li>
+              <li>
+                Логика: Найдите следующий элемент в последовательности 2, 4, 8,
+                16, ...
+              </li>
+              <li>
+                Грамотность: Прочитайте отрывок и ответьте на вопросы по
+                содержанию.
+              </li>
+            </ul>
+            <h2 className="text-2xl font-bold mb-4 text-[#1CB0F6]">
+              Отзывы Пользователей
+            </h2>
+            <p className="mb-4 text-gray-700">
+              "Этот тест действительно помог мне улучшить свои знания перед
+              экзаменами!" - Анна, студентка
+            </p>
+            <h2 className="text-2xl font-bold mb-4 text-[#1CB0F6]">
+              Часто Задаваемые Вопросы
+            </h2>
+            <p className="mb-4 text-gray-700">
+              <strong>Вопрос:</strong> Сколько времени занимает тест?
+              <br />
+              <strong>Ответ:</strong> Тест занимает примерно 60 минут.
+            </p>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
-function BotIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 8V4H8" />
-      <rect width="16" height="12" x="4" y="8" rx="2" />
-      <path d="M2 14h2" />
-      <path d="M20 14h2" />
-      <path d="M15 13v2" />
-      <path d="M9 13v2" />
-    </svg>
-  );
-}
-
-function XIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  );
-}
-
-function MenuIcon(props: any) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
-    </svg>
-  );
-}
 
 export default TestSelection;

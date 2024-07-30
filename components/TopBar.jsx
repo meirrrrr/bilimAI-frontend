@@ -1,8 +1,14 @@
 import React from "react";
-import Image from "next/image";
-import logo from "../app/utils/topbar/burger.svg";
 import { useState } from "react";
 import Link from "next/link";
+import {
+  XMarkIcon,
+  UserIcon,
+  BookOpenIcon,
+  ChatBubbleLeftEllipsisIcon,
+  ArrowLeftOnRectangleIcon,
+  ClipboardDocumentListIcon,
+} from "@heroicons/react/24/outline";
 
 const TopBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,37 +34,42 @@ const TopBar = () => {
         </div>
       </header>
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-gray-900 text-white transform ${
+        className={`fixed top-0 right-0 h-full w-64 bg-[#1CB0F6] text-white transform ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out z-40`}
       >
         <div className="p-4">
           <button className="text-white" onClick={toggleMenu}>
-            <XIcon />
+            <XMarkIcon className="h-6 w-6" />
           </button>
           <Link href="/profile">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg hover:bg-[#1390c4] transition-colors">
+            <button className="flex items-center justify-end gap-[10px] mt-4 w-full bg-[#1CB0F6] text-white py-4 px-4 rounded-lg hover:bg-[#1390c4] transition-colors">
               Мой профиль
+              <UserIcon className="h-5 w-5 mr-3" />
             </button>
           </Link>
           <Link href="/about-test">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg hover:bg-[#1390c4] transition-colors">
+            <button className="flex items-center justify-end gap-[10px] mt-4 w-full bg-[#1CB0F6] text-white py-4 px-4 rounded-lg hover:bg-[#1390c4] transition-colors">
               Начать тест
+              <ClipboardDocumentListIcon className="h-5 w-5 mr-3" />
             </button>
           </Link>
           <Link href="/lessons">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg hover:bg-[#1390c4] transition-colors">
+            <button className="flex items-center justify-end gap-[10px] mt-4 w-full bg-[#1CB0F6] text-white py-4 px-4 rounded-lg hover:bg-[#1390c4] transition-colors">
               Уроки
+              <BookOpenIcon className="h-5 w-5 mr-3" />
             </button>
           </Link>
           <Link href="/chat">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg hover:bg-[#1390c4] transition-colors">
+            <button className="flex items-center justify-end gap-[10px] mt-4 w-full bg-[#1CB0F6] text-white py-4 px-4 rounded-lg hover:bg-[#1390c4] transition-colors">
               AI ассистент
+              <ChatBubbleLeftEllipsisIcon className="h-5 w-5 mr-3" />
             </button>
           </Link>
           <Link href="/">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg hover:bg-[#1390c4] transition-colors">
+            <button className="flex items-center justify-end gap-[10px] mt-4 w-full bg-[#1CB0F6] text-white py-4 px-4 rounded-lg hover:bg-[#1390c4] transition-colors">
               Выйти
+              <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-3" />
             </button>
           </Link>
         </div>

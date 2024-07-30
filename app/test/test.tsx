@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
+import TopBar from "@/components/TopBar";
 import HintModal from "./ModalWindow";
 
 interface Question {
@@ -175,150 +175,103 @@ export default function Home() {
   //------------------------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-white p-4">
-      <header className="flex items-center justify-between py-4">
-        <div className="flex items-center gap-2">
-          <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center">
-            <BotIcon className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <h2 className="text-2xl font-bold text-[#1CB0F6] w-[100px]">
-            Bilim AI
-          </h2>
-          <button
-            className="text-gray-500 top-4 right-4 p-2 rounded-md ml-[130px]"
-            onClick={toggleMenu}
-          >
-            {isMenuOpen ? <XIcon /> : <MenuIcon />}
-          </button>
-        </div>
-      </header>
-      <div
-        className={`fixed top-0 right-0 h-full w-64 bg-gray-900 text-white transform ${
-          isMenuOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 ease-in-out z-40`}
-      >
-        <div className="p-4">
-          <button className="text-white" onClick={toggleMenu}>
-            <XIcon />
-          </button>
-          <Link href="/profile">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-              Мой профиль
-            </button>
-          </Link>
-          <Link href="/about-test">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-              Начать тест
-            </button>
-          </Link>
-          <Link href="/lessons">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-              Уроки
-            </button>
-          </Link>
-          <Link href="/chat">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-              AI ассистент
-            </button>
-          </Link>
-          <Link href="/">
-            <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-              Выйти
-            </button>
-          </Link>
-        </div>
-      </div>
-      <main className="max-w-xl mx-auto bg-white rounded-lg">
-        <h1 className="text-3xl font-semibold mb-4">БИЛ тест</h1>
-        <div className="relative pt-1 mb-4">
-          <div className="flex mb-2 items-center justify-between">
-            <div>
-              <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-[#1CB0F6]">
-                Progress
-              </span>
+    <>
+      <TopBar />
+      <div className="min-h-screen bg-gray-200 py-4 pt-[50px]">
+        <main className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 lg:p-10">
+          <h1 className="text-3xl font-semibold mb-6 text-center text-[#1CB0F6]">
+            БИЛ тест
+          </h1>
+          <div className="relative pt-1 mb-6">
+            <div className="flex mb-2 items-center justify-between">
+              <div>
+                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-[#1CB0F6]">
+                  Progress
+                </span>
+              </div>
+              <div className="text-right">
+                <span className="text-xs font-semibold inline-block text-blue-600">
+                  {currentQuestionIndex}/10
+                </span>
+              </div>
             </div>
-            <div className="text-right">
-              <span className="text-xs font-semibold inline-block text-blue-600">
-                {currentQuestionIndex}/10
-              </span>
+            <div className="w-full bg-gray-300 rounded-full h-2 overflow-hidden">
+              <div
+                className="bg-green-500 h-full rounded-full transition-all duration-500"
+                style={{ width: `${progressPercentage}%` }}
+              ></div>
             </div>
           </div>
-          <div className="w-8/10 bg-gray-300 rounded-full h-2 overflow-hidden ">
-            <div
-              className="bg-green-500 h-full rounded-full transition-all duration-500"
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
-        </div>
-        {currentQuestion ? (
-          <div className="mb-4">
-            <h2 className="text-sm font-medium text-gray-500 mb-2">
-              {currentQuestion.topic}
-            </h2>
-            <p className="text-sm mt-2 mb-[10px]">
-              {currentQuestionIndex + 1}. {currentQuestion.question}
-            </p>
-            <div className="mt-4">
-              {options.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerClick(option)}
-                  className={`block w-full py-2 px-4 rounded-lg border mb-4 focus:outline-none text-sm ${
-                    selectedAnswer === option
-                      ? "bg-[#1CB0F6] text-white"
-                      : "bg-white border-gray-400 text-black hover:bg-blue-100"
-                  }`}
-                >
-                  {option}
-                </button>
-              ))}
+          {currentQuestion ? (
+            <div className="mb-6">
+              <h2 className="text-sm font-medium text-gray-500 mb-2">
+                {currentQuestion.topic}
+              </h2>
+              <p className="text-md mt-2 mb-4">
+                {currentQuestionIndex + 1}. {currentQuestion.question}
+              </p>
+              <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2">
+                {options.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerClick(option)}
+                    className={`block w-full py-3 px-5 rounded-lg border focus:outline-none text-sm transition-all duration-300 ${
+                      selectedAnswer === option
+                        ? "bg-[#1CB0F6] text-white"
+                        : "bg-white border-gray-300 text-black hover:bg-blue-100"
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="bg-white p-8 rounded-lg shadow-md w-4/5 max-w-lg text-center mb-5">
-            <div className="animate-pulse flex space-x-4">
-              <div className="flex-1 space-y-4 py-1">
-                <div className="h-4 bg-gray-400 rounded w-3/4"></div>
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-400 rounded"></div>
-                  <div className="h-4 bg-gray-400 rounded"></div>
-                  <div className="h-4 bg-gray-400 rounded"></div>
+          ) : (
+            <div className="bg-white p-8 rounded-lg shadow-md w-full lg:w-3/4 mx-auto text-center mb-6">
+              <div className="animate-pulse flex space-x-4">
+                <div className="flex-1 space-y-4 py-1">
+                  <div className="h-4 bg-gray-400 rounded w-3/4"></div>
+                  <div className="space-y-2">
+                    <div className="h-4 bg-gray-400 rounded"></div>
+                    <div className="h-4 bg-gray-400 rounded"></div>
+                    <div className="h-4 bg-gray-400 rounded"></div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-        {currentQuestionIndex < questions.length - 1 ? (
-          <div>
+          )}
+          {currentQuestionIndex < questions.length - 1 ? (
+            <div className="mt-6">
+              <button
+                className="w-full bg-gradient-to-r from-orange-400 to-pink-500 text-white py-3 px-5 rounded-lg mb-4 text-sm transition-all duration-300 hover:shadow-lg"
+                onClick={handleNextClick}
+              >
+                След
+              </button>
+              <button
+                onClick={handleGetHint}
+                className="w-full bg-[#1CB0F6] text-white py-3 px-5 rounded-lg text-sm transition-all duration-300 hover:bg-[#1390c4]"
+              >
+                {loadingHint ? "Грузится..." : "Подсказка"}
+              </button>
+              <HintModal
+                isOpen={isModalOpen}
+                closeModal={closeModal}
+                hint={hint}
+                loadingHint={loadingHint}
+              />
+            </div>
+          ) : (
             <button
-              className="mt-4 w-full bg-gradient-to-r from-orange-400 to-pink-500 text-white py-2 px-4 rounded mb-3 text-sm"
-              onClick={handleNextClick}
+              className="mt-6 w-full bg-gradient-to-r from-orange-400 to-pink-500 text-white py-3 px-5 rounded-lg text-sm transition-all duration-300 hover:shadow-lg"
+              onClick={handleSubmit}
             >
-              След
+              Закончить
             </button>
-            <button
-              onClick={handleGetHint}
-              className="mt-2 bg-blue-500 text-white py-2 px-4 rounded w-[343px] text-sm"
-            >
-              {loadingHint ? "Грузится..." : "Подсказка"}
-            </button>
-            <HintModal
-              isOpen={isModalOpen}
-              closeModal={closeModal}
-              hint={hint}
-              loadingHint={loadingHint}
-            />
-          </div>
-        ) : (
-          <button
-            className="mt-4 w-full bg-gradient-to-r from-orange-400 to-pink-500 text-white py-2 px-4 rounded text-sm"
-            onClick={handleSubmit}
-          >
-            Закончить
-          </button>
-        )}
-      </main>
-    </div>
+          )}
+        </main>
+      </div>
+    </>
   );
 }
 

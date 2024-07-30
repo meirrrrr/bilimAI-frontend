@@ -2,9 +2,10 @@
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import logo from "./elprimo.jpeg";
 import Image from "next/image";
+import TopBar from "@/components/TopBar";
 
 interface TestHistory {
   name: string;
@@ -56,62 +57,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="flex items-center justify-between px-6 py-4 bg-white shadow-md">
-        <div className="flex items-center gap-2">
-          <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center">
-            <BotIcon className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <h2 className="text-2xl font-bold text-[#1CB0F6] w-[100px]">
-            Bilim AI
-          </h2>
-          <button
-            className="text-gray-500 top-4 right-4 p-2 rounded-md ml-[130px]"
-            onClick={toggleMenu}
-          >
-            {isMenuOpen ? (
-              <XIcon className="w-6 h-6" />
-            ) : (
-              <MenuIcon className="w-6 h-6" />
-            )}
-          </button>
-        </div>
-        <div
-          className={`fixed top-0 right-0 h-full w-64 bg-gray-900 text-white transform ${
-            isMenuOpen ? "translate-x-0" : "translate-x-full"
-          } transition-transform duration-300 ease-in-out z-40`}
-        >
-          <div className="p-4">
-            <button className="text-white" onClick={toggleMenu}>
-              <XIcon className="w-6 h-6" />
-            </button>
-            <Link href="/profile">
-              <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-                Мой профиль
-              </button>
-            </Link>
-            <Link href="/about-test">
-              <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-                Начать тест
-              </button>
-            </Link>
-            <Link href="/lessons">
-              <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-                Уроки
-              </button>
-            </Link>
-            <Link href="/chat">
-              <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-                AI ассистент
-              </button>
-            </Link>
-            <Link href="/">
-              <button className="mt-4 w-full bg-[#1CB0F6] text-white py-2 px-4 rounded-lg">
-                Выйти
-              </button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <TopBar />
       <div className="container mx-auto p-6">
         <h1 className="text-xl font-bold mb-6">Мой профиль</h1>
         {userData ? (
