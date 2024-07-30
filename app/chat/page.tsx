@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "../../components/SideBar";
 import { UserIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import dotenv from "dotenv";
