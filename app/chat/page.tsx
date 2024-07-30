@@ -3,6 +3,9 @@ import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import TopBar from "../../components/TopBar";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const apikey = process.env.OPENAI_API_KEY;
 
