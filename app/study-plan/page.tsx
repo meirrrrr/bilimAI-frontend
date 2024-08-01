@@ -60,7 +60,7 @@ const StudyPlan = () => {
         },
         {
           headers: {
-            Authorization: `Bearer sk-proj-z4G0hgyw4brUC0rZkRzMT3BlbkFJIJYYtGeSiiVthFlQvx1c`,
+            Authorization: `Bearer`,
             "Content-Type": "application/json",
           },
         }
