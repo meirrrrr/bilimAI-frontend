@@ -1,23 +1,64 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { UserIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import axios from "axios";
 import {
   CalendarIcon,
   ChartBarIcon,
   HomeIcon,
   BookOpenIcon,
   QuestionMarkCircleIcon,
-  ArrowLeftEndOnRectangleIcon,
+  ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
+
+interface TestHistory {
+  name: string;
+  createdAt: string;
+  _id: string;
+}
+
+interface User {
+  _id: string;
+  email: string;
+  username: string;
+  password: string;
+  currentTest: string;
+  testHistory: TestHistory[];
+  __v: number;
+}
 
 const Dashboard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [result, setResult] = useState<string | null>("");
+  const [userData, setUserData] = useState<User | null>(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     console.log(isMenuOpen);
   };
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    const result = localStorage.getItem("sum");
+    setResult(result!);
+
+    const userString = user ? JSON.parse(user) : null;
+    const fetchUser = async () => {
+      try {
+        if (userString && userString._id) {
+          const res = await axios.get<User>(
+            `https://bilimai-backend-production.up.railway.app/api/v1/user/${userString._id}`
+          );
+          setUserData(res.data);
+          console.log(res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -51,13 +92,6 @@ const Dashboard = () => {
             Тесты
           </Link>
           <Link
-            href="/study-plan"
-            className="flex items-center p-3 mt-2 text-gray-600 rounded-lg hover:bg-gray-200"
-          >
-            <CalendarIcon className="w-5 h-5 mr-2" />
-            План обучения
-          </Link>
-          <Link
             href="/chat"
             className="flex items-center p-3 mt-2 text-gray-600 rounded-lg hover:bg-gray-200"
           >
@@ -72,17 +106,10 @@ const Dashboard = () => {
             Профиль
           </Link>
           <Link
-            href="/support"
-            className="flex items-center p-3 mt-2 text-gray-600 rounded-lg hover:bg-gray-200"
-          >
-            <QuestionMarkCircleIcon className="w-5 h-5 mr-2" />
-            Поддержка
-          </Link>
-          <Link
             href="/"
             className="flex items-center p-3 mt-2 text-gray-600 rounded-lg hover:bg-gray-200"
           >
-            <ArrowLeftEndOnRectangleIcon className="w-5 h-5 mr-2" />
+            <ArrowLeftOnRectangleIcon className="w-5 h-5 mr-2" />
             Выйти
           </Link>
         </nav>
@@ -101,7 +128,9 @@ const Dashboard = () => {
               <Bars3Icon className="w-6 h-6" />
             )}
           </button>
-          <h1 className="text-xl font-bold">Добро пожаловать, [User Name]</h1>
+          <h1 className="text-xl font-bold">
+            Добро пожаловать, {userData?.username}!
+          </h1>
           <div className="flex items-center">
             <Link href="/profile">
               <button className="p-2 text-gray-600 hover:text-gray-900 cursor-pointer">
@@ -111,41 +140,34 @@ const Dashboard = () => {
           </div>
         </header>
 
-        {/* Main Dashboard Content */}
         <main className="flex-grow p-6">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            {/* Countdown to Exam */}
             <div className="p-4 bg-white rounded-lg shadow-md">
               <h2 className="text-lg font-bold text-[#1CB0F6]">
                 Дни до экзамена
               </h2>
-              <p className="mt-2 text-2xl font-semibold">10 дней</p>
+              <p className="mt-2 text-2xl font-semibold">200 дней</p>
             </div>
 
-            {/* Recent Tests */}
             <div className="p-4 bg-white rounded-lg shadow-md lg:col-span-2">
               <h2 className="text-lg font-bold text-[#1CB0F6]">
                 История тестов
               </h2>
               <ul className="mt-2">
-                <li className="flex justify-between p-2 border-b">
-                  <span>Математика</span>
-                  <span>85%</span>
-                </li>
-                <li className="flex justify-between p-2 border-b">
-                  <span>Логика</span>
-                  <span>90%</span>
-                </li>
-                <li className="flex justify-between p-2 border-b">
-                  <span>Грамотность</span>
-                  <span>78%</span>
-                </li>
+                {userData?.testHistory.slice(-2).map((test) => (
+                  <li
+                    key={test._id}
+                    className="flex justify-between p-2 border-b"
+                  >
+                    <span>{test.name}</span>
+                    <span>{new Date(test.createdAt).toLocaleDateString()}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-6 mt-6 lg:grid-cols-3">
-            {/* Performance Insights */}
             <div className="p-4 bg-white rounded-lg shadow-md lg:col-span-2">
               <h2 className="text-lg font-bold text-[#1CB0F6]">
                 Анализ производительности
@@ -155,7 +177,6 @@ const Dashboard = () => {
               </p>
             </div>
 
-            {/* Daily Quiz */}
             <div className="p-4 bg-white rounded-lg shadow-md">
               <h2 className="text-lg font-bold text-[#1CB0F6]">
                 Ежедневный квиз
@@ -168,7 +189,6 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-6 mt-6 lg:grid-cols-3">
-            {/* Study Materials */}
             <div className="p-4 bg-white rounded-lg shadow-md">
               <h2 className="text-lg font-bold text-[#1CB0F6]">
                 Учебные материалы
@@ -178,13 +198,11 @@ const Dashboard = () => {
               </p>
             </div>
 
-            {/* User Achievements */}
             <div className="p-4 bg-white rounded-lg shadow-md">
               <h2 className="text-lg font-bold text-[#1CB0F6]">Достижения</h2>
               <p className="mt-2">Значки и награды за достижения.</p>
             </div>
 
-            {/* Contact Information */}
             <div className="p-4 bg-white rounded-lg shadow-md">
               <h2 className="text-lg font-bold text-[#1CB0F6]">
                 Контактная информация

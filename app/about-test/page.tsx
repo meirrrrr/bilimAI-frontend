@@ -27,7 +27,6 @@ const TestSelection = () => {
     try {
       const userId = localStorage.getItem("user");
       const userString = userId ? JSON.parse(userId) : null;
-      console.log("Test started");
       router.push(`/test?type=${testType}&id=${userString._id}`);
     } catch (error) {
       console.error("Error starting test:", error);
@@ -70,13 +69,6 @@ const TestSelection = () => {
             Тесты
           </Link>
           <Link
-            href="/study-plan"
-            className="flex items-center p-3 mt-2 text-gray-600 rounded-lg hover:bg-gray-200"
-          >
-            <CalendarIcon className="w-5 h-5 mr-2" />
-            План обучения
-          </Link>
-          <Link
             href="/chat"
             className="flex items-center p-3 mt-2 text-gray-600 rounded-lg hover:bg-gray-200"
           >
@@ -89,13 +81,6 @@ const TestSelection = () => {
           >
             <UserIcon className="w-5 h-5 mr-2" />
             Профиль
-          </Link>
-          <Link
-            href="/support"
-            className="flex items-center p-3 mt-2 text-gray-600 rounded-lg hover:bg-gray-200"
-          >
-            <QuestionMarkCircleIcon className="w-5 h-5 mr-2" />
-            Поддержка
           </Link>
           <Link
             href="/"

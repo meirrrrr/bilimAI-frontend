@@ -131,13 +131,6 @@ const ChatComponent = () => {
             Тесты
           </Link>
           <Link
-            href="/study-plan"
-            className="flex items-center p-3 mt-2 text-gray-600 rounded-lg hover:bg-gray-200"
-          >
-            <CalendarIcon className="w-5 h-5 mr-2" />
-            План обучения
-          </Link>
-          <Link
             href="/chat"
             className="flex items-center p-3 mt-2 text-gray-600 rounded-lg hover:bg-gray-200"
           >
@@ -150,13 +143,6 @@ const ChatComponent = () => {
           >
             <UserIcon className="w-5 h-5 mr-2" />
             Профиль
-          </Link>
-          <Link
-            href="/support"
-            className="flex items-center p-3 mt-2 text-gray-600 rounded-lg hover:bg-gray-200"
-          >
-            <QuestionMarkCircleIcon className="w-5 h-5 mr-2" />
-            Поддержка
           </Link>
           <Link
             href="/"
