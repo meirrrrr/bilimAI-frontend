@@ -13,31 +13,25 @@ export default function Component() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen">
-      <header className="w-full shadow px-3 bg-gray-100 mb-[80px]">
+    <div className="flex flex-col items-center min-h-screen bg-gray-50">
+      <header className="w-full fixed top-0 z-50 shadow px-3 bg-gray-100">
         <div className="container mx-auto flex items-center justify-between py-5">
           <div className="flex items-center gap-3">
             <BotIcon />
             <h1 className="text-2xl font-bold text-[#1CB0F6]">Bilim AI</h1>
           </div>
-          <button
-            className="text-gray-500 z-50 p-2 rounded-md"
-            onClick={toggleMenu}
-          >
-            {isMenuOpen ? "" : <MenuIcon />}
+          <button className="text-gray-500 p-2 rounded-md" onClick={toggleMenu}>
+            {isMenuOpen ? <XIcon /> : <MenuIcon />}
           </button>
         </div>
       </header>
       {/* Sliding Menu */}
       <div
-        className={`fixed top-0 left-0 w-full bg-gray-200 transform h-[150px] ${
+        className={`fixed top-20 left-0 w-full bg-gray-200 transform ${
           isMenuOpen ? "translate-y-0" : "-translate-y-full"
         } transition-transform duration-700 ease-in-out z-40`}
       >
         <div className="p-4">
-          <button className="text-black" onClick={toggleMenu}>
-            <XIcon />
-          </button>
           <Link href="/login">
             <button className="mt-4 w-full bg-[#58CC02] text-white py-2 px-4 rounded-lg">
               Login
@@ -46,15 +40,13 @@ export default function Component() {
         </div>
       </div>
       <main
-        className={`container mx-auto flex flex-col py-8 px-4 items-center bg-white ${
-          isMenuOpen
-            ? "opacity-40 pointer-events-none"
-            : "opacity-100 backdrop-blur-sm"
+        className={`container mx-auto flex flex-col py-8 px-4 items-center bg-white mt-[80px] ${
+          isMenuOpen ? "opacity-40 pointer-events-none" : "opacity-100"
         }`}
       >
-        <section className="py-3 mb-6 w-full max-w-lg text-center mt-[20px] md:max-w-2xl lg:max-w-4xl">
+        <section className="py-3 mb-6 w-full text-center mt-[20px]">
           <div>
-            <h2 className="text-3xl font-bold mb-4 lg:text-[44px] mb-[20px]">
+            <h2 className="text-3xl font-bold mb-4 mt-[90px] lg:text-[44px]">
               Поступи в школы мечты{" "}
               <span className="text-[#1CB0F6]">БИЛ НИШ</span> с нашим{" "}
               <span className="text-[#1CB0F6]">AI учителем</span>
@@ -65,22 +57,24 @@ export default function Component() {
             </p>
           </div>
           <div className="flex justify-center">
-            <button className="bg-[#58CC02] text-white py-3 px-4 rounded-2xl flex mb-[50px] transform transition-transform duration-300 hover:scale-105">
-              <Link href="/registration">Попробовать бесплатно</Link>
-              <ArrowRightIcon />
-            </button>
+            <Link href="/registration">
+              <button className="bg-[#58CC02] text-white py-3 px-4 rounded-2xl flex mb-[50px] transform transition-transform duration-300 hover:scale-105">
+                Попробовать бесплатно
+                <ArrowRightIcon />
+              </button>
+            </Link>
           </div>
-          <div className="flex gap-[10px] items-center lg:justify-center gap-[50px]">
+          <div className="flex gap-[10px] items-center justify-center lg:gap-[90px]">
             <Image
               src={ktl}
               alt="ktl-logo"
-              width={110}
+              width={200}
               className="relative top-[10px]"
             />
             <Image src={nis} alt="nis-logo" width={200} />
           </div>
         </section>
-        <div className="px-[260px] py-[70px]">
+        <div className="px-4 py-[70px] text-center">
           <h1 className="text-3xl mb-3 text-[#1CB0F6] font-semibold">
             Study Smarter, Not Harder
           </h1>
@@ -93,7 +87,7 @@ export default function Component() {
             течением времени.
           </p>
         </div>
-        <section className="bg-white rounded-lg p-6 w-full max-w-lg md:max-w-2xl lg:max-w-4xl">
+        <section className="bg-white rounded-lg p-6 w-full text-center">
           <h3 className="text-[#1CB0F6] mb-2 text-sm lg:text-lg">
             Обучение на основе искусственного интеллекта
           </h3>
@@ -102,7 +96,7 @@ export default function Component() {
           </h4>
           <div className="flex flex-col gap-[30px] mb-[50px]">
             <div className="bg-[#58CC02] py-[40px] px-6 rounded-xl text-white transform transition-transform duration-300 hover:scale-105">
-              <h1 className="font-medium text-lg mb-5 ">АДАПТИВНЫЕ ТЕСТЫ</h1>
+              <h1 className="font-medium text-lg mb-5">АДАПТИВНЫЕ ТЕСТЫ</h1>
               <p className="text-sm font-thin text-white">
                 Подготовьтесь к тесту в КТЛ НИШ с помощью нашего полнометражного
                 адаптивного теста и посмотрите прогнозируемый результат.
@@ -129,7 +123,7 @@ export default function Component() {
           </div>
         </section>
       </main>
-      <footer className="text-black py-6 mt-8 bg-gray-100 w-[100%]">
+      <footer className="text-black py-6 mt-8 bg-gray-100 w-full">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-between items-start space-y-4 md:space-y-0">
             <div className="w-full sm:w-auto mb-4 sm:mb-0 text-center sm:text-left">

@@ -125,7 +125,7 @@ export default function Home() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3003/api/v1/submit-test",
+        "https://bilimai-backend-production.up.railway.app/api/v1/submit-test",
         {
           userId: userId,
           testId: testId,
@@ -261,9 +261,16 @@ export default function Home() {
               <Bars3Icon className="w-6 h-6" />
             )}
           </button>
-          <h1 className="text-xl font-bold">БИЛ тест</h1>
+          <h1 className="text-xl font-bold">Тест</h1>
+          <div className="flex items-center">
+            <Link href="/profile">
+              <button className="p-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+                <UserIcon className="w-6 h-6" />
+              </button>
+            </Link>
+          </div>
         </header>
-        <main className="min-h-screen bg-gray-200 py-4 pt-[50px] flex-grow">
+        <main className="min-h-screen bg-gray-200 py-4 flex-grow lg:pt-[100px] ">
           <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 lg:p-10">
             <h1 className="text-3xl font-semibold mb-6 text-center text-[#1CB0F6]">
               БИЛ тест
@@ -277,7 +284,7 @@ export default function Home() {
                 </div>
                 <div className="text-right">
                   <span className="text-xs font-semibold inline-block text-blue-600">
-                    {currentQuestionIndex}/10
+                    {currentQuestionIndex + 1}/15
                   </span>
                 </div>
               </div>

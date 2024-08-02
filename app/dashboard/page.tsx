@@ -160,6 +160,7 @@ const Dashboard = () => {
                     className="flex justify-between p-2 border-b"
                   >
                     <span>{test.name}</span>
+                    {/* <span>{test.}</span> */}
                     <span>{new Date(test.createdAt).toLocaleDateString()}</span>
                   </li>
                 ))}
@@ -183,7 +184,7 @@ const Dashboard = () => {
               </h2>
               <p className="mt-2">Быстрый ежедневный квиз для практики.</p>
               <button className="w-full px-4 py-2 mt-4 text-white bg-[#1CB0F6] rounded-lg hover:bg-blue-600">
-                Начать квиз
+                <Link href="/about-test">Начать квиз</Link>
               </button>
             </div>
           </div>
@@ -208,7 +209,7 @@ const Dashboard = () => {
                 Контактная информация
               </h2>
               <p className="mt-2">Если у вас есть вопросы, свяжитесь с нами.</p>
-              <p className="mt-2 text-gray-700">Email: support@example.com</p>
+              <p className="mt-2 text-gray-700">Email: meiirzhan04@gmail.com</p>
             </div>
           </div>
         </main>

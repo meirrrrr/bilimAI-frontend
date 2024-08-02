@@ -53,7 +53,7 @@ const Profile = () => {
       try {
         if (userString && userString._id) {
           const res = await axios.get<User>(
-            `http://localhost:3003/api/v1/user/${userString._id}`
+            `https://bilimai-backend-production.up.railway.app/api/v1/user/${userString._id}`
           );
           setUserData(res.data);
           console.log(res.data.testHistory[25].score);

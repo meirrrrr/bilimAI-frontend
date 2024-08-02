@@ -104,7 +104,7 @@ const TestSelection = () => {
               <Bars3Icon className="w-6 h-6" />
             )}
           </button>
-          <h1 className="text-xl font-bold">Добро пожаловать, [User Name]</h1>
+          <h1 className="text-xl font-bold">Тесты</h1>
           <div className="flex items-center">
             <Link href="/profile">
               <button className="p-2 text-gray-600 hover:text-gray-900 cursor-pointer">
@@ -119,8 +119,7 @@ const TestSelection = () => {
               Выберите тип теста
             </h1>
             <p className="mb-6 text-gray-700">
-              В тесте будет 40 вопросов по математике, 20 вопросов по логике, и
-              20 вопросов на грамотность чтения.
+              В тесте будет 15 вопросов по математике и логике.
             </p>
             <div className="mb-6 flex justify-center">
               <label className="mr-6 flex items-center">

@@ -18,8 +18,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const apikey = process.env.OPENAI_API_KEY;
-
 const ChatComponent = () => {
   const [messages, setMessages] = useState([
     {
@@ -168,7 +166,7 @@ const ChatComponent = () => {
               <Bars3Icon className="w-6 h-6" />
             )}
           </button>
-          <h1 className="text-xl font-bold">Чат</h1>
+          <h1 className="text-xl font-bold">AI chat</h1>
           <div className="flex items-center">
             <Link href="/profile">
               <button className="p-2 text-gray-600 hover:text-gray-900 cursor-pointer">
@@ -179,107 +177,55 @@ const ChatComponent = () => {
         </header>
 
         {/* Chat Content */}
-        <div className="flex flex-col flex-grow bg-gray-200 rounded-lg">
-          <div className="overflow-y-scroll p-6 space-y-4 flex-grow bg-gray-200 rounded-lg lg:px-[200px]">
+        <div className="flex flex-col flex-grow p-4 space-y-4 bg-gray-100">
+          <div className="flex-grow overflow-y-auto">
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex items-center gap-4 ${
-                  message.sender === "user" ? "justify-end" : ""
+                className={`flex items-start space-x-2 mb-4 ${
+                  message.sender === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                {message.sender === "ChatGPT" && (
-                  <div className="bg-green-200 rounded-full w-8 h-8 flex items-center justify-center">
-                    <BotIcon className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                )}
                 <div
-                  className={`rounded-lg p-4 max-w-[70%] ${
-                    message.sender === "ChatGPT"
-                      ? "bg-green-200 text-green-800"
-                      : "bg-blue-200 text-blue-800"
+                  className={`p-3 rounded-lg shadow ${
+                    message.sender === "user"
+                      ? "bg-[#1CB0F6] text-white"
+                      : "bg-white text-gray-800"
                   }`}
                 >
-                  <p className="text-sm">{message.message}</p>
+                  {message.message}
                 </div>
-                {message.sender === "user" && (
-                  <div className="bg-blue-200 rounded-full w-8 h-8 flex items-center justify-center">
-                    <UserIcon className="w-5 h-5 text-primary-foreground" />
-                  </div>
-                )}
               </div>
             ))}
           </div>
-          <div className="px-6 py-[20px] bg-white">
-            <div className="flex justify-center items-center relative w-full md:w-3/4 lg:w-2/3 mx-auto">
-              <Textarea
-                placeholder="Напиши свое сообщение..."
-                name="message"
-                id="message"
-                rows={1}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                className="min-h-[48px] rounded-2xl resize-none p-4 border border-neutral-400 shadow-sm pr-16 w-full"
-              />
-              <Button
-                type="button"
-                size="icon"
-                className="absolute w-8 h-8 top-3 right-3 bg-[#1CB0F6] hover:bg-[#1390c4] transition-colors"
-                onClick={handleSend}
-              >
-                <SendIcon className="w-4 h-4 text-white" />
-                <span className="sr-only">Send</span>
-              </Button>
+
+          {/* Typing Indicator */}
+          {typing && (
+            <div className="text-sm text-gray-500">
+              <em>ChatGPT is пишет...</em>
             </div>
+          )}
+
+          {/* Input Area */}
+          <div className="flex items-center space-x-2">
+            <Textarea
+              className="flex-grow border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={2}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type your message..."
+            />
+            <Button
+              className="bg-[#1CB0F6] text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onClick={handleSend}
+              disabled={!input}
+            >
+              Отправить
+            </Button>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-function BotIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 8V4H8" />
-      <rect width="16" height="12" x="4" y="8" rx="2" />
-      <path d="M2 14h2" />
-      <path d="M20 14h2" />
-      <path d="M15 13v2" />
-      <path d="M9 13v2" />
-    </svg>
-  );
-}
-
-function SendIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m22 2-7 20-4-9-9-4Z" />
-      <path d="M22 2 11 13" />
-    </svg>
-  );
-}
-
 export default ChatComponent;

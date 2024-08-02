@@ -9,7 +9,6 @@ import {
   ChartBarIcon,
   HomeIcon,
   BookOpenIcon,
-  QuestionMarkCircleIcon,
   ArrowLeftEndOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 
@@ -19,14 +18,14 @@ const Feedback = () => {
   const [sum, setSum] = useState("") || null;
   const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
 
+  const [test, setTest] = useState({});
+
   useEffect(() => {
     const feedback = localStorage.getItem("feedback");
     const sum = localStorage.getItem("sum");
     console.log(feedback);
-
     setFeedback(feedback!);
     setSum(sum!);
-
     setFeedback(feedback || "");
     setCorrectAnswersCount(Number(sum) || 0);
   }, []);
@@ -106,7 +105,7 @@ const Feedback = () => {
         <div className="min-h-screen flex flex-col items-center py-10">
           <div className="max-w-xl w-full bg-gray-100 p-8 rounded-lg shadow-md mb-6">
             <h1 className="text-3xl font-semibold mb-4 text-center">Фидбэк</h1>
-            <p className="mb-6 text-center">{feedback}</p>
+            <p className="mb-6 text-center"></p>
             <div className="flex items-center justify-center mb-6">
               <div className="relative">
                 <div className="w-24 h-24 rounded-full border-4 border-gray-300 flex items-center justify-center">
