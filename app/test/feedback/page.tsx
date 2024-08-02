@@ -95,12 +95,19 @@ const Feedback = () => {
             className="p-2 text-gray-600 hover:text-gray-900"
           >
             {isMenuOpen ? (
-              <XIcon className="w-6 h-6" />
+              <XMarkIcon className="w-6 h-6" />
             ) : (
-              <MenuIcon className="w-6 h-6" />
+              <Bars3Icon className="w-6 h-6" />
             )}
           </button>
-          <h2 className="text-2xl font-bold text-[#1CB0F6]">Bilim AI</h2>
+          <h1 className="text-xl font-bold">Фидбэк</h1>
+          <div className="flex items-center">
+            <Link href="/profile">
+              <button className="p-2 text-gray-600 hover:text-gray-900 cursor-pointer">
+                <UserIcon className="w-6 h-6" />
+              </button>
+            </Link>
+          </div>
         </header>
         <div className="min-h-screen flex flex-col items-center py-10">
           <div className="max-w-xl w-full bg-gray-100 p-8 rounded-lg shadow-md mb-6">
