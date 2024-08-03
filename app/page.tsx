@@ -64,14 +64,14 @@ export default function Component() {
               </button>
             </Link>
           </div>
-          <div className="flex gap-[10px] items-center justify-center lg:gap-[90px]">
+          <div className="flex items-center justify-center lg:gap-[90px]">
             <Image
               src={ktl}
               alt="ktl-logo"
               width={200}
               className="relative top-[10px]"
             />
-            <Image src={nis} alt="nis-logo" width={200} />
+            <Image src={nis} alt="nis-logo" width={180} className="pr-[20px]" />
           </div>
         </section>
         <div className="px-4 py-[70px] text-center">
