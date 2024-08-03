@@ -41,7 +41,7 @@ export default function Home() {
   const typeOfTest = searchParams.get("type");
   const userId = searchParams.get("id");
 
-  const [testId, setTestId] = useState();
+  const [testId, setTestId] = useState<string | undefined>();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -134,25 +134,37 @@ export default function Home() {
         }
       );
       console.log(response.data);
-      router.push("/test/feedback");
     } catch (error) {
       console.error("Error submitting test:", error);
     }
 
-    try {
-      console.log(finalAnswers);
-      const response = await axios.post(
-        "https://bilimai-py-production.up.railway.app/generate_feedback/",
-        { answers: finalAnswers }
-      );
-      const feedback = response.data.results;
-      console.log(feedback);
-      localStorage.setItem("feedback", JSON.stringify(feedback));
-      localStorage.setItem("sum", feedback.score.toString());
-      router.push("/test/feedback");
-    } catch (error) {
-      console.error("Error feedback test:", error);
-    }
+    // Generate feedback on the frontend
+    const feedback = generateFeedback(finalAnswers);
+    localStorage.setItem("feedback", feedback.feedback);
+    localStorage.setItem("sum", feedback.score.toString());
+    localStorage.setItem("answers", JSON.stringify(finalAnswers));
+    router.push("/test/feedback");
+  };
+
+  const generateFeedback = (answers: AnsweredQuestions[]) => {
+    const topicsToReview = Array.from(
+      new Set(
+        answers
+          .filter((answer) => !answer.correct)
+          .map((answer) => answer.topic)
+      )
+    );
+    const correctAnswersCount = answers.filter(
+      (answer) => answer.correct
+    ).length;
+
+    const feedbackText = `You need to review the topics: ${topicsToReview.join(
+      ", "
+    )}`;
+    return {
+      feedback: feedbackText,
+      score: correctAnswersCount,
+    };
   };
 
   if (loading) {
@@ -368,69 +380,5 @@ export default function Home() {
         </main>
       </div>
     </div>
-  );
-}
-
-function BotIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 8V4H8" />
-      <rect width="16" height="12" x="4" y="8" rx="2" />
-      <path d="M2 14h2" />
-      <path d="M20 14h2" />
-      <path d="M15 13v2" />
-      <path d="M9 13v2" />
-    </svg>
-  );
-}
-
-function XIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  );
-}
-
-function MenuIcon(props: any) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
-    </svg>
   );
 }
