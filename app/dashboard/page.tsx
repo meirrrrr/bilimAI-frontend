@@ -188,7 +188,6 @@ const Dashboard = () => {
               </button>
             </div>
           </div>
-
           <div className="grid grid-cols-1 gap-6 mt-6 lg:grid-cols-3">
             <div className="p-4 bg-white rounded-lg shadow-md">
               <h2 className="text-lg font-bold text-[#1CB0F6]">

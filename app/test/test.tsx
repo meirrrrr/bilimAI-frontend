@@ -121,6 +121,7 @@ export default function Home() {
       correct: answeredQuestions[index]?.correct || false,
       difficulty: question.difficulty,
     }));
+
     console.log("Final Answers:", finalAnswers);
 
     try {
@@ -139,6 +140,7 @@ export default function Home() {
     }
 
     try {
+      console.log(finalAnswers);
       const response = await axios.post(
         "https://bilimai-py-production.up.railway.app/generate_feedback/",
         { answers: finalAnswers }

@@ -8,14 +8,37 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-export default function Component() {
+export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const router = useRouter();
 
+  const validateEmail = (email: any) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  const validatePassword = (password: any) => {
+    return password.length >= 6; // Example: Password must be at least 6 characters long
+  };
+
   const handleRegistration = async () => {
+    setError("");
+    setSuccess("");
+
+    if (!validateEmail(email)) {
+      setError("Неверный формат электронной почты");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      setError("Длина пароля должна составлять не менее 6 символов");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "https://bilimai-backend-production.up.railway.app/api/v1/register",
@@ -25,10 +48,14 @@ export default function Component() {
           password,
         }
       );
+      setSuccess(
+        "Пользователь успешно создан. Теперь вы можете войти в систему."
+      );
       console.log("User successfully created", response.data);
-      router.push("/test");
-    } catch (error: any) {
-      console.error("Login failed:", error.response?.data || error.message);
+      router.push("/dashboard");
+    } catch (error) {
+      setError("Данные не верны");
+      console.error("Registration failed");
     }
   };
 
@@ -47,6 +74,8 @@ export default function Component() {
         </div>
         <Card>
           <CardContent className="space-y-4 mt-5">
+            {error && <p className="text-red-500">{error}</p>}
+            {success && <p className="text-green-500">{success}</p>}
             <div className="space-y-2">
               <Label htmlFor="name">Имя</Label>
               <Input
@@ -54,6 +83,7 @@ export default function Component() {
                 type="text"
                 placeholder="Введите имя"
                 required
+                value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
@@ -63,28 +93,30 @@ export default function Component() {
                 id="password"
                 type="password"
                 placeholder="Введите пароль"
-                onChange={(e) => setPassword(e.target.value)}
                 required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Email</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="Введите почтовый адрес"
-                onChange={(e) => setEmail(e.target.value)}
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </CardContent>
           <CardFooter>
             <Button
-              type="submit"
+              type="button"
               className="w-full bg-[#58CC02]"
               onClick={handleRegistration}
             >
-              <Link href="/login">Зарегистрироваться</Link>
+              Зарегистрироваться
             </Button>
           </CardFooter>
         </Card>

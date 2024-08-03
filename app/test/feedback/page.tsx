@@ -23,8 +23,8 @@ const Feedback = () => {
   useEffect(() => {
     const feedback = localStorage.getItem("feedback");
     const sum = localStorage.getItem("sum");
-    console.log(feedback);
     setFeedback(feedback!);
+    console.log(sum);
     setSum(sum!);
     setFeedback(feedback || "");
     setCorrectAnswersCount(Number(sum) || 0);
@@ -117,14 +117,14 @@ const Feedback = () => {
               <div className="relative">
                 <div className="w-24 h-24 rounded-full border-4 border-gray-300 flex items-center justify-center">
                   <span className="text-xl font-bold text-gray-700">
-                    {Number(sum) * 10}%
+                    {((Number(sum) * 100) / 15).toFixed(2)}%
                   </span>
                 </div>
                 <div
                   className="absolute top-0 left-0 w-24 h-24 rounded-full border-4 border-orange-400 transform -rotate-90 origin-center"
                   style={{
                     clip: `rect(0px, ${
-                      24 * (correctAnswersCount / 10)
+                      10000 * (correctAnswersCount / 15)
                     }px, 24px, 0px)`,
                   }}
                 ></div>
@@ -133,25 +133,6 @@ const Feedback = () => {
             <p className="text-center font-medium text-gray-700">
               Keep pushing forward!
             </p>
-            <div className="flex justify-center mt-4">
-              <button className="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                <svg
-                  className="w-5 h-5 mr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M7 16v-1a4 4 0 014-4h1m1 1v1a4 4 0 014 4v1m0 0h-1a4 4 0 01-4-4v-1m0 0h1a4 4 0 014 4v1m0 0v1m-7-8H5m0 0H4v1m1 0h1a4 4 0 014-4V4m0 0V3a4 4 0 00-4-4h-1m-1 1H4v1m0 0v1m-1 0h1v1m0 0h1a4 4 0 014 4v1m0 0v1m1 0h1v1m0 0h1v1m0 0v1m1-1h-1m0 0H5m0 0H4v1m1 0h1a4 4 0 014 4v1m0 0v1m1-1h1m0 0v-1m1-4v-1a4 4 0 00-4-4h-1m0 0H5m0 0H4v1m1 0h1v1m0 0h1a4 4 0 014-4V4m0 0v1m1 0h1v1m0 0h1v1m0 0v1"
-                  />
-                </svg>
-                Share
-              </button>
-            </div>
           </div>
           <div className="max-w-2xl w-full bg-gray-100 p-8 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4">Темы</h2>

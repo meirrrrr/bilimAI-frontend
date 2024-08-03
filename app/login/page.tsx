@@ -12,10 +12,14 @@ import { useRouter } from "next/navigation";
 export default function Component() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const router = useRouter();
 
   const handleLogin = async () => {
+    setLoading(true);
+    setError("");
     try {
       const response = await axios.post(
         "https://bilimai-backend-production.up.railway.app/api/v1/login",
@@ -28,11 +32,16 @@ export default function Component() {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("user", JSON.stringify(user));
-      console.log(localStorage.getItem("user"));
-      console.log("Login successful:", response.data);
-      router.push("/chat");
+      router.push("/dashboard");
     } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        setError("Ошибка в логине");
+      } else {
+        setError("Не удалось выполнить вход. Попробуйте еще раз.");
+      }
       console.error("Login failed:", error.response?.data || error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,6 +62,7 @@ export default function Component() {
         </div>
         <Card>
           <CardContent className="space-y-4 mt-5">
+            {error && <p className="text-red-500">{error}</p>}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -81,8 +91,9 @@ export default function Component() {
               type="submit"
               className="w-full bg-[#58CC02]"
               onClick={handleLogin}
+              disabled={loading}
             >
-              Войти
+              {loading ? "Загрузка..." : "Войти"}
             </Button>
           </CardFooter>
         </Card>
