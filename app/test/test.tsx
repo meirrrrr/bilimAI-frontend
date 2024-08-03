@@ -158,7 +158,7 @@ export default function Home() {
       (answer) => answer.correct
     ).length;
 
-    const feedbackText = `You need to review the topics: ${topicsToReview.join(
+    const feedbackText = `Вам нужно разобрать темы: ${topicsToReview.join(
       ", "
     )}`;
     return {
