@@ -70,8 +70,8 @@ export default function Component() {
             <div className="space-y-2">
               <Label htmlFor="phone">Email</Label>
               <Input
-                id="phone"
-                type="tel"
+                id="email"
+                type="email"
                 placeholder="Введите почтовый адрес"
                 onChange={(e) => setEmail(e.target.value)}
                 required
