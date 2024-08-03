@@ -140,9 +140,9 @@ export default function Home() {
 
     // Generate feedback on the frontend
     const feedback = generateFeedback(finalAnswers);
-    localStorage.setItem("feedback", feedback.feedback);
-    localStorage.setItem("sum", feedback.score.toString());
-    localStorage.setItem("answers", JSON.stringify(finalAnswers));
+    sessionStorage.setItem("feedback", feedback.feedback);
+    sessionStorage.setItem("sum", feedback.score.toString());
+    sessionStorage.setItem("answers", JSON.stringify(finalAnswers));
     router.push("/test/feedback");
   };
 

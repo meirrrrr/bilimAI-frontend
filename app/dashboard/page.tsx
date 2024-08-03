@@ -39,8 +39,8 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    const result = localStorage.getItem("sum");
+    const user = sessionStorage.getItem("user");
+    const result = sessionStorage.getItem("sum");
     setResult(result!);
 
     const userString = user ? JSON.parse(user) : null;

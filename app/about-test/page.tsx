@@ -25,7 +25,7 @@ const TestSelection = () => {
 
   const handleStartTest = async () => {
     try {
-      const userId = localStorage.getItem("user");
+      const userId = sessionStorage.getItem("user");
       const userString = userId ? JSON.parse(userId) : null;
       router.push(`/test?type=${testType}&id=${userString._id}`);
     } catch (error) {

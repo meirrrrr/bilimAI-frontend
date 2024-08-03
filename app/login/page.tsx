@@ -29,9 +29,9 @@ export default function Component() {
         }
       );
       const { accessToken, refreshToken, user } = response.data;
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-      localStorage.setItem("user", JSON.stringify(user));
+      sessionStorage.setItem("accessToken", accessToken);
+      sessionStorage.setItem("refreshToken", refreshToken);
+      sessionStorage.setItem("user", JSON.stringify(user));
       router.push("/dashboard");
     } catch (error: any) {
       if (error.response && error.response.status === 401) {

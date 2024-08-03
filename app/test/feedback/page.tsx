@@ -41,12 +41,12 @@ const Feedback = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
 
   useEffect(() => {
-    const storedFeedback = localStorage.getItem("feedback");
-    const storedSum = localStorage.getItem("sum");
+    const storedFeedback = sessionStorage.getItem("feedback");
+    const storedSum = sessionStorage.getItem("sum");
     const storedQuestions = JSON.parse(
-      localStorage.getItem("questions") || "[]"
+      sessionStorage.getItem("questions") || "[]"
     );
-    const storedAnswers = JSON.parse(localStorage.getItem("answers") || "[]");
+    const storedAnswers = JSON.parse(sessionStorage.getItem("answers") || "[]");
 
     setFeedback(storedFeedback || "");
     setSum(storedSum || "");
