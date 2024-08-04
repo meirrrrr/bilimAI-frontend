@@ -162,7 +162,6 @@ const Profile = () => {
               <div className="flex items-center bg-blue-300 p-4 rounded-md mt-4">
                 <div className="bg-yellow-300 p-2 rounded-full mr-4">🏆</div>
                 <div>
-                  <p className="font-bold text-xl">{result}</p>
                   <p className="text-md">Рейтинг: {userData?.rating ?? 0}</p>
                   <p className="text-sm text-gray-600">
                     За каждый пройденный тест начисляется рейтинг
