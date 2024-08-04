@@ -52,7 +52,7 @@ export default function Register() {
         "Пользователь успешно создан. Теперь вы можете войти в систему."
       );
       console.log("User successfully created", response.data);
-      router.push("/dashboard");
+      router.push("/login");
     } catch (error) {
       setError("Данные не верны");
       console.error("Registration failed");

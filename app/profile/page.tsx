@@ -20,9 +20,10 @@ import {
 interface TestHistory {
   name: string;
   testName: string;
-  score: number;
   date: string;
   createdAt?: string;
+  score: string;
+  rating: number;
 }
 
 interface User {
@@ -32,6 +33,7 @@ interface User {
   username: string;
   password: string;
   __v: number;
+  rating: number;
 }
 
 const Profile = () => {
@@ -53,7 +55,7 @@ const Profile = () => {
       try {
         if (userString && userString._id) {
           const res = await axios.get<User>(
-            `https://bilimai-backend-production.up.railway.app/api/v1/user/${userString._id}`
+            `http://localhost:3003/api/v1/user/${userString._id}`
           );
           setUserData(res.data);
           console.log(res.data.testHistory[25].score);
@@ -161,7 +163,10 @@ const Profile = () => {
                 <div className="bg-yellow-300 p-2 rounded-full mr-4">🏆</div>
                 <div>
                   <p className="font-bold text-xl">{result}</p>
-                  <p className="text-sm text-gray-600">Ваш общий балл</p>
+                  <p className="text-md">Рейтинг: {userData.rating}</p>
+                  <p className="text-sm text-gray-600">
+                    За каждый пройденный тест начисляется рейтинг
+                  </p>
                 </div>
               </div>
               <div className="bg-blue-300 p-4 rounded-md mt-4">
