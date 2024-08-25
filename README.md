@@ -1,10 +1,3 @@
-
-               .__                      
-  _____   ____ |__|____________________ 
- /     \_/ __ \|  \_  __ \_  __ \_  __ \
-|  Y Y  \  ___/|  ||  | \/|  | \/|  | \/
-|__|_|  /\___  >__||__|   |__|   |__|   
-      \/     \/                         
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
