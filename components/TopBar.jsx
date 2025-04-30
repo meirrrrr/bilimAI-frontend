@@ -12,6 +12,7 @@ import {
 
 const TopBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoading, setIsLoadind] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
