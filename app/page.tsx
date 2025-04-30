@@ -7,6 +7,7 @@ import nis from "./utils/nis.jpg";
 
 export default function Component() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
