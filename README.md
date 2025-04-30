@@ -38,5 +38,3 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 # bilimAI-frontend
 
 # App for preparing to exams
-
-<!--  -->
